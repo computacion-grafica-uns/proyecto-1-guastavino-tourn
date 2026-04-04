@@ -20,7 +20,7 @@ public class FileReader
 
     public void ReadFile(string fileName)
     {
-        string path = "Assets/Models3d/" + fileName + ".obj";
+        string path = "Assets/Objetos/" + fileName + ".obj";
         StreamReader reader = new StreamReader(path);
         string fileData = (reader.ReadToEnd());
         ReadEachLine(fileData);
@@ -63,6 +63,7 @@ public class FileReader
             else if (lines[i].StartsWith("f "))
             {
                 string[] parts = line.Split(' ', System.StringSplitOptions.RemoveEmptyEntries);
+                List<int> faceIndices = new List<int>();
 
                 for (int k = 1; k < parts.Length; k++)
                 {
@@ -71,7 +72,7 @@ public class FileReader
                     Debug.Log(index);
                     if (int.TryParse(index, out int value))
                     {
-                        faces.Add(value - 1);
+                        faceIndices.Add(value - 1);
                         Debug.Log("valor: "+value);
 
                     }
@@ -79,6 +80,14 @@ public class FileReader
                     {
                         Debug.LogWarning("No se pudo parsear: " + index);
                     }
+                }
+
+                // Triangular (fan)
+                for (int k = 1; k < faceIndices.Count - 1; k++)
+                {
+                    faces.Add(faceIndices[0]);
+                    faces.Add(faceIndices[k]);
+                    faces.Add(faceIndices[k + 1]);
                 }
             }
         }
@@ -114,5 +123,20 @@ public class FileReader
 
     public void GetColores(){
 
+    }
+
+    public Vector3 GetCenter()
+    {
+        return centro;
+    }
+
+    public Vector3 GetSize()
+    {
+        return new Vector3(maxx - minx, maxy - miny, maxz - minz);
+    }
+
+    public Vector3 GetHalfExtents()
+    {
+        return GetSize() * 0.5f;
     }
 }
