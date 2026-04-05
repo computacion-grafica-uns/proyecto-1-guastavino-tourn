@@ -2,175 +2,173 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Proyecto1 : MonoBehaviour
+public class Projecto1 : MonoBehaviour
 {
-    private Vector3[] vPiso;
-    private int[] fPiso;
-    private GameObject piso;
-    private Vector3[] vTecho;
-    private int[] fTecho;
-    private GameObject techo;
-    private Vector3[] vPared1;
-    private int[] fPared1;
-    private GameObject pared1;
-    private GameObject miCamara;
+    private GameObject myCamera;
     private FileReader fileReader;
+    private int width = 10;
+    private int height = 3;
+    private int depth = 10;
+    private float wallThickness = 0.15f;
 
-    private int anchura = 10;
-    private int altura = 3;
-    private int profundidad = 10;
-    private float grosorPared = 0.15f;
-
-    // Start is called before the first frame update
     void Start()
     {
-        createPiso();
-        createTecho();
-        createPared1();
+        createFloor();
+        createCeiling();
+        createWall1();
         fileReader = new FileReader();
-        cargarCama();
+        loadBed();
         createCamera();
     }
 
-    private void createPiso()
+    private void createFloor()
     {
-        piso = new GameObject("Piso");
-        piso.AddComponent<MeshFilter>();
-        piso.GetComponent<MeshFilter>().mesh = new Mesh();
-        piso.AddComponent<MeshRenderer>();
-        vPiso = new Vector3[]
+        Vector3[] floorVertices;
+        int[] floorFaces;
+        GameObject floor;
+        floor = new GameObject("Floor");
+        floor.AddComponent<MeshFilter>();
+        floor.GetComponent<MeshFilter>().mesh = new Mesh();
+        floor.AddComponent<MeshRenderer>();
+        floorVertices = new Vector3[]
         {
-            // Triángulo 1
+            // Triangle 1
             new Vector3(0,0,0),
-            new Vector3(0,0,10),
-            new Vector3(10,0,0),
+            new Vector3(0,0,depth),
+            new Vector3(width,0,0),
             
 
-            // Triángulo 2
-            new Vector3(0,0,10),
-            new Vector3(10,0,10),
-            new Vector3(10,0,0),
+            // Triangle 2
+            new Vector3(0,0,depth),
+            new Vector3(width,0,depth),
+            new Vector3(width,0,0),
 
         };
     
-        fPiso = new int[] {
+        floorFaces = new int[] {
             0,1,2,
             3,4,5,
         };
 
-        Color[] cPiso = new Color[vPiso.Length];
-        for (int i = 0; i < cPiso.Length; i++)
+        Color[] floorColors = new Color[floorVertices.Length];
+        for (int i = 0; i < floorColors.Length; i++)
         {
-            cPiso[i] = cPiso[i] = new Color(237f / 255f, 195f / 255f, 133f / 255f);
+            floorColors[i] = floorColors[i] = new Color(237f / 255f, 195f / 255f, 133f / 255f);
         }
 
-        UpdateMesh(piso,vPiso,fPiso, cPiso);
+        UpdateMesh(floor,floorVertices,floorFaces, floorColors);
     }
 
-    private void createTecho()
+    private void createCeiling()
     {
-        techo = new GameObject("Techo");
-        techo.AddComponent<MeshFilter>();
-        techo.GetComponent<MeshFilter>().mesh = new Mesh();
-        techo.AddComponent<MeshRenderer>();
-        vTecho = new Vector3[]
+        Vector3[] ceilingVertices;
+        int[] ceilingFaces;
+        GameObject ceiling;
+        ceiling = new GameObject("Ceiling");
+        ceiling.AddComponent<MeshFilter>();
+        ceiling.GetComponent<MeshFilter>().mesh = new Mesh();
+        ceiling.AddComponent<MeshRenderer>();
+        ceilingVertices = new Vector3[]
         {
-            // Triángulo 1
-            new Vector3(0,3,0),
-            new Vector3(0,3,10),
-            new Vector3(10,3,0),
+            // Triangle 1
+            new Vector3(0,height,0),
+            new Vector3(0,height,depth),
+            new Vector3(width,height,0),
             
 
-            // Triángulo 2
-            new Vector3(0,3,10),
-            new Vector3(10,3,10),
-            new Vector3(10,3,0),
+            // Triangle 2
+            new Vector3(0,height,depth),
+            new Vector3(width,height,depth),
+            new Vector3(width,height,0),
 
         };
     
-        fTecho = new int[] {
+        ceilingFaces = new int[] {
             0,1,2,
             3,4,5,
         };
 
-        Color[] cTecho = new Color[vTecho.Length];
-        for (int i = 0; i < cTecho.Length; i++)
+        Color[] ceilingColors = new Color[ceilingVertices.Length];
+        for (int i = 0; i < ceilingColors.Length; i++)
         {
-            cTecho[i] = cTecho[i] = new Color(243f / 255f, 243f / 255f, 243f / 255f);
+            ceilingColors[i] = ceilingColors[i] = new Color(243f / 255f, 243f / 255f, 243f / 255f);
         }
-        UpdateMesh(techo,vTecho,fTecho, cTecho);
+        UpdateMesh(ceiling,ceilingVertices,ceilingFaces, ceilingColors);
     }
-    private void createPared1()
+    private void createWall1()
     {
-        pared1 = new GameObject("Pared1");
-        pared1.AddComponent<MeshFilter>();
-        pared1.GetComponent<MeshFilter>().mesh = new Mesh();
-        pared1.AddComponent<MeshRenderer>();
-        vPared1 = new Vector3[]
+        Vector3[] wall1Vertices;
+        int[] wall1Faces;
+        GameObject wall1;
+        wall1 = new GameObject("Wall1");
+        wall1.AddComponent<MeshFilter>();
+        wall1.GetComponent<MeshFilter>().mesh = new Mesh();
+        wall1.AddComponent<MeshRenderer>();
+        wall1Vertices = new Vector3[]
         {
-            // Triángulo 1
+            // Triangle 1
             new Vector3(0,0,0),
             new Vector3(0,3,0),
             new Vector3(4.6f,3,0),
             
-            // Triángulo 2
+            // Triangle 2
             new Vector3(0,0,0),
             new Vector3(4.6f,3,0),
             new Vector3(4.6f,0,0),
 
-            // Triángulo 3
+            // Triangle 3
             new Vector3(4.6f,2,0),
             new Vector3(4.6f,3,0),
             new Vector3(5.4f,3,0),
 
-            // Triángulo 4
+            // Triangle 4
             new Vector3(5.4f,2,0),
             new Vector3(4.6f,2,0),
             new Vector3(5.4f,3,0),
             
-            // Triángulo 5
+            // Triangle 5
             new Vector3(5.4f,3,0),
             new Vector3(5.9f,3,0),
             new Vector3(5.4f,0,0),
 
-            // Triángulo 6
+            // Triangle 6
             new Vector3(5.9f,0,0),
             new Vector3(5.4f,0,0),
             new Vector3(5.9f,3,0),
 
-            // Triángulo 7
+            // Triangle 7
             new Vector3(5.9f,3,0),
             new Vector3(7.4f,3,0),
             new Vector3(5.9f,2,0),
 
-            // Triángulo 8
+            // Triangle 8
             new Vector3(5.9f,2,0),
             new Vector3(7.4f,3,0),
             new Vector3(7.4f,2,0),
 
-            // Triángulo 9
+            // Triangle 9
             new Vector3(5.9f,0,0),
             new Vector3(5.9f,1,0),
             new Vector3(7.4f,1,0),
 
-            // Triángulo 10
+            // Triangle 10
             new Vector3(5.9f,0,0),
             new Vector3(7.4f,1,0),
             new Vector3(7.4f,0,0),
 
-            // Triángulo 11
+            // Triangle 11
             new Vector3(7.4f,0,0),
             new Vector3(7.4f,3,0),
             new Vector3(10,3,0),
 
-            // Triángulo 12
+            // Triangle 12
             new Vector3(10,3,0),
             new Vector3(10,0,0),
             new Vector3(7.4f,0,0),
 
         };
     
-        fPared1 = new int[] {
+        wall1Faces = new int[] {
             0,1,2,
             3,4,5,
             6,7,8,
@@ -185,50 +183,50 @@ public class Proyecto1 : MonoBehaviour
             33,34,35
         };
 
-        Color[] cPared1 = new Color[vPared1.Length];
-        for (int i = 0; i < cPared1.Length; i++)
+        Color[] wall1Colors = new Color[wall1Vertices.Length];
+        for (int i = 0; i < wall1Colors.Length; i++)
         {
-            cPared1[i] = cPared1[i] = new Color(243f / 255f, 243f / 255f, 243f / 255f);
+            wall1Colors[i] = wall1Colors[i] = new Color(243f / 255f, 243f / 255f, 243f / 255f);
         }
 
-        UpdateMesh(pared1,vPared1,fPared1, cPared1);
+        UpdateMesh(wall1,wall1Vertices,wall1Faces, wall1Colors);
     }
     private void createCamera(){
-        miCamara = new GameObject("Camara");
-        miCamara.AddComponent<Camera>();
-        miCamara.transform.position = new Vector3(-20,4,-10);
-        miCamara.transform.rotation = Quaternion.Euler(0,60,0);
-        miCamara.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
-        miCamara.GetComponent<Camera>().backgroundColor = Color.black;
+        myCamera = new GameObject("Camera");
+        myCamera.AddComponent<Camera>();
+        myCamera.transform.position = new Vector3(-20,4,-10);
+        myCamera.transform.rotation = Quaternion.Euler(0,60,0);
+        myCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
+        myCamera.GetComponent<Camera>().backgroundColor = Color.black;
     }
 
-    private void cargarCama()
+    private void loadBed()
     {
         fileReader.ReadFile("muebles/beds/bed1/bed1");
 
-        GameObject cama1 = new GameObject("Cama1");
-        cama1.AddComponent<MeshFilter>();
-        cama1.GetComponent<MeshFilter>().mesh = new Mesh();
-        cama1.AddComponent<MeshRenderer>();
+        GameObject bed1 = new GameObject("Bed1");
+        bed1.AddComponent<MeshFilter>();
+        bed1.GetComponent<MeshFilter>().mesh = new Mesh();
+        bed1.AddComponent<MeshRenderer>();
 
-        Vector3[] vCama = fileReader.GetVertexes();
-        Color[] cCama = new Color[vCama.Length];
-        for (int i = 0; i < cCama.Length; i++)
+        Vector3[] bedVertices = fileReader.GetVertexes();
+        Color[] bedColors = new Color[bedVertices.Length];
+        for (int i = 0; i < bedColors.Length; i++)
         {
-            cCama[i] = cCama[i] = new Color(217f / 255f, 155f / 255f, 233f / 255f);
+            bedColors[i] = bedColors[i] = new Color(217f / 255f, 155f / 255f, 233f / 255f);
         }
 
-        UpdateMesh(cama1, vCama, fileReader.GetFaces(), cCama);
+        UpdateMesh(bed1, bedVertices, fileReader.GetFaces(), bedColors);
 
-        Vector3 mitadTamanoCama1 = fileReader.GetHalfExtents();
+        Vector3 halfSizeBed1 = fileReader.GetHalfExtents();
 
-        Vector3 newPosition = new Vector3(anchura - grosorPared - mitadTamanoCama1.x, mitadTamanoCama1.y, profundidad - grosorPared - mitadTamanoCama1.z);
+        Vector3 newPosition = new Vector3(width - wallThickness - halfSizeBed1.x, halfSizeBed1.y, depth - wallThickness - halfSizeBed1.z);
         Vector3 newRotation = new Vector3(0f, 0f, 0f);
         Vector3 newScale = new Vector3(1f, 1f, 1f);
 
         Matrix4x4 modelMatrix = CreateModelMatrix(newPosition, newRotation, newScale);
 
-        cama1.GetComponent<Renderer>().material.SetMatrix("_ModelMatrix", modelMatrix);
+        bed1.GetComponent<Renderer>().material.SetMatrix("_ModelMatrix", modelMatrix);
     }
 
     private void UpdateMesh(GameObject gO,Vector3[] v,int[] f, Color[] c){
