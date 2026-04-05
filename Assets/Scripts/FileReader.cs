@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -6,137 +5,167 @@ using UnityEngine;
 
 public class FileReader
 {
-    // Start is called before the first frame update
-
     private List<Vector3> vertices = new List<Vector3>();
     private List<int> faces = new List<int>();
+    private List<Color> faceColors = new List<Color>();
+    private List<Vector2> uvList = new List<Vector2>();
+    private List<Vector2> rawUVs = new List<Vector2>();
+
+    private Dictionary<string, Color> materials = new Dictionary<string, Color>();
+    private Color currentColor = Color.white;
+
     private Vector3 centro;
-    private float minx;
-    private float miny;
-    private float minz;
-    private float maxx;
-    private float maxy;
-    private float maxz;
+    private float minx, miny, minz;
+    private float maxx, maxy, maxz;
 
     public void ReadFile(string fileName)
     {
         string path = "Assets/Objetos/" + fileName + ".obj";
         StreamReader reader = new StreamReader(path);
-        string fileData = (reader.ReadToEnd());
-        ReadEachLine(fileData);
+        string fileData = reader.ReadToEnd();
         reader.Close();
-        Debug.Log(fileData);
+
+        string folder = Path.GetDirectoryName(path).Replace("\\", "/") + "/";
+        Debug.Log("Folder: " + folder);
+        ReadEachLine(fileData, folder);
     }
 
-    private void ReadEachLine(string fileData)
+    private void ReadMtlFile(string mtlPath)
     {
+        if (!File.Exists(mtlPath))
+        {
+            Debug.LogWarning("No se encontró el .mtl en: " + mtlPath);
+            return;
+        }
+
+        string[] lines = File.ReadAllLines(mtlPath);
+        string currentMaterial = "";
+
+        foreach (string line in lines)
+        {
+            string trimmed = line.Trim();
+            if (trimmed.StartsWith("newmtl "))
+            {
+                currentMaterial = trimmed.Substring(7).Trim();
+            }
+            else if (trimmed.StartsWith("Kd ") && currentMaterial != "")
+            {
+                string[] parts = trimmed.Split(' ');
+                float r = float.Parse(parts[1], CultureInfo.InvariantCulture);
+                float g = float.Parse(parts[2], CultureInfo.InvariantCulture);
+                float b = float.Parse(parts[3], CultureInfo.InvariantCulture);
+                materials[currentMaterial] = new Color(r, g, b);
+            }
+        }
+    }
+
+    private void ReadEachLine(string fileData, string folder)
+    {
+        List<Vector3> rawVertices = new List<Vector3>();
         string[] lines = fileData.Split('\n');
         bool boundsInitialized = false;
+
         for (int i = 0; i < lines.Length; i++)
         {
-            string line = lines[i];
-            if (lines[i].StartsWith("v "))
+            string line = lines[i].Trim();
+
+            if (line.StartsWith("mtllib "))
+            {
+                string mtlFile = line.Substring(7).Trim();
+                ReadMtlFile(folder + mtlFile);
+            }
+            else if (line.StartsWith("usemtl "))
+            {
+                string matName = line.Substring(7).Trim();
+                currentColor = materials.ContainsKey(matName) ? materials[matName] : Color.white;
+            }
+            else if (line.StartsWith("vt "))
+            {
+                string[] parts = line.Split(' ');
+                float u = float.Parse(parts[1], CultureInfo.InvariantCulture);
+                float v = float.Parse(parts[2], CultureInfo.InvariantCulture);
+                rawUVs.Add(new Vector2(u, v));
+            }
+            else if (line.StartsWith("v "))
             {
                 string[] parts = line.Split(' ');
                 float x = float.Parse(parts[1], CultureInfo.InvariantCulture);
                 float y = float.Parse(parts[2], CultureInfo.InvariantCulture);
                 float z = float.Parse(parts[3], CultureInfo.InvariantCulture);
-                vertices.Add(new Vector3(x, y, z));
+
                 if (!boundsInitialized)
                 {
-                    minx = maxx = x;
-                    miny = maxy = y;
-                    minz = maxz = z;
+                    minx = maxx = x; miny = maxy = y; minz = maxz = z;
                     boundsInitialized = true;
                 }
                 else
                 {
-                    if (x < minx) minx = x;
-                    if (y < miny) miny = y;
-                    if (z < minz) minz = z;
-                    if (x > maxx) maxx = x;
-                    if (y > maxy) maxy = y;
-                    if (z > maxz) maxz = z;
+                    if (x < minx) minx = x; if (x > maxx) maxx = x;
+                    if (y < miny) miny = y; if (y > maxy) maxy = y;
+                    if (z < minz) minz = z; if (z > maxz) maxz = z;
                 }
-                
+
+                rawVertices.Add(new Vector3(x, y, z));
             }
-            else if (lines[i].StartsWith("f "))
+            else if (line.StartsWith("f "))
             {
                 string[] parts = line.Split(' ', System.StringSplitOptions.RemoveEmptyEntries);
-                List<int> faceIndices = new List<int>();
+                List<int> vertIndices = new List<int>();
+                List<int> uvIndices = new List<int>();
 
                 for (int k = 1; k < parts.Length; k++)
                 {
-                    Debug.Log(parts[k]);
-                    string index = parts[k].Split('/')[0]; // por si viene con textura/normal
-                    Debug.Log(index);
-                    if (int.TryParse(index, out int value))
-                    {
-                        faceIndices.Add(value - 1);
-                        Debug.Log("valor: "+value);
-
-                    }
-                    else
-                    {
-                        Debug.LogWarning("No se pudo parsear: " + index);
-                    }
+                    string[] split = parts[k].Split('/');
+                    if (int.TryParse(split[0], out int vIdx))
+                        vertIndices.Add(vIdx - 1);
+                    if (split.Length > 1 && int.TryParse(split[1], out int uvIdx))
+                        uvIndices.Add(uvIdx - 1);
                 }
 
-                // Triangular (fan)
-                for (int k = 1; k < faceIndices.Count - 1; k++)
+                for (int k = 1; k < vertIndices.Count - 1; k++)
                 {
-                    faces.Add(faceIndices[0]);
-                    faces.Add(faceIndices[k]);
-                    faces.Add(faceIndices[k + 1]);
+                    int nextIndex = vertices.Count;
+
+                    vertices.Add(rawVertices[vertIndices[0]]);
+                    vertices.Add(rawVertices[vertIndices[k]]);
+                    vertices.Add(rawVertices[vertIndices[k + 1]]);
+
+                    faces.Add(nextIndex);
+                    faces.Add(nextIndex + 1);
+                    faces.Add(nextIndex + 2);
+
+                    if (uvIndices.Count > 0)
+                    {
+                        uvList.Add(rawUVs[uvIndices[0]]);
+                        uvList.Add(rawUVs[uvIndices[k]]);
+                        uvList.Add(rawUVs[uvIndices[k + 1]]);
+                    }
+
+                    faceColors.Add(currentColor);
+                    faceColors.Add(currentColor);
+                    faceColors.Add(currentColor);
                 }
             }
         }
 
-        // Calcular el centro del bounding box
         centro = new Vector3(
             (maxx + minx) * 0.5f,
             (maxy + miny) * 0.5f,
             (maxz + minz) * 0.5f
         );
 
-        // Restar el centro a cada vértice para centrar el modelo
         for (int i = 0; i < vertices.Count; i++)
         {
             Vector3 v = vertices[i];
-            v = new Vector3(v.x - centro.x, v.y - centro.y, v.z - centro.z);
-            vertices[i] = v;
+            vertices[i] = new Vector3(v.x - centro.x, v.y - centro.y, v.z - centro.z);
         }
     }
 
-
-
-
-    public Vector3[] GetVertexes()
-    {
-        return vertices.ToArray();
-    }
-
-    public int[] GetFaces()
-    {
-        return faces.ToArray();
-    }
-
-    public void GetColores(){
-
-    }
-
-    public Vector3 GetCenter()
-    {
-        return centro;
-    }
-
-    public Vector3 GetSize()
-    {
-        return new Vector3(maxx - minx, maxy - miny, maxz - minz);
-    }
-
-    public Vector3 GetHalfExtents()
-    {
-        return GetSize() * 0.5f;
-    }
+    public Vector3[] GetVertexes() => vertices.ToArray();
+    public int[] GetFaces() => faces.ToArray();
+    public Color[] GetColors() => faceColors.ToArray();
+    public Vector2[] GetUVs() => uvList.ToArray();
+    public Vector3 GetCenter() => centro;
+    public Vector3 GetSize() => new Vector3(maxx - minx, maxy - miny, maxz - minz);
+    public Vector3 GetHalfExtents() => GetSize() * 0.5f;
 }

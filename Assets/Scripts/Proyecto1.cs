@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -310,6 +310,7 @@ public class Projecto1 : MonoBehaviour
         myCamera.transform.rotation = Quaternion.Euler(0,60,0);
         myCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
         myCamera.GetComponent<Camera>().backgroundColor = Color.black;
+        myCamera.GetComponent<Camera>().nearClipPlane = 0.01f;
     }
 
     private void loadBed()
@@ -321,18 +322,25 @@ public class Projecto1 : MonoBehaviour
         bed1.GetComponent<MeshFilter>().mesh = new Mesh();
         bed1.AddComponent<MeshRenderer>();
 
-        Vector3[] bedVertices = fileReader.GetVertexes();
-        Color[] bedColors = new Color[bedVertices.Length];
-        for (int i = 0; i < bedColors.Length; i++)
-        {
-            bedColors[i] = bedColors[i] = new Color(217f / 255f, 155f / 255f, 233f / 255f);
-        }
+        Mesh mesh = bed1.GetComponent<MeshFilter>().mesh;
+        mesh.vertices = fileReader.GetVertexes();
+        mesh.triangles = fileReader.GetFaces();
+        mesh.uv = fileReader.GetUVs();
 
-        UpdateMesh(bed1, bedVertices, fileReader.GetFaces(), bedColors);
+        // Cargar la textura desde Resources
+        Texture2D bedTexture = Resources.Load<Texture2D>("bed1Texture");
+        Debug.Log(bedTexture != null ? "Textura OK" : "Textura no encontrada");
 
-        Vector3 halfSizeBed1 = fileReader.GetHalfExtents();
+        Material mat = new Material(Shader.Find("SimpleShaderTexture")); // ← shader con textura
+        mat.mainTexture = bedTexture;
+        bed1.GetComponent<MeshRenderer>().material = mat;
 
-        Vector3 newPosition = new Vector3(width - wallThickness - halfSizeBed1.x, halfSizeBed1.y, depth - wallThickness - halfSizeBed1.z);
+        Vector3 half = fileReader.GetHalfExtents();
+        Vector3 newPosition = new Vector3(
+            width - wallThickness - half.x,
+            half.y,
+            depth - wallThickness - half.z
+        );
         Vector3 newRotation = new Vector3(0f, 0f, 0f);
         Vector3 newScale = new Vector3(1f, 1f, 1f);
 
