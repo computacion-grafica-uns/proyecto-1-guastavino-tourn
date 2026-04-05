@@ -106,44 +106,46 @@ public class Projecto1 : MonoBehaviour
         wall1.AddComponent<MeshRenderer>();
         wall1Vertices = new Vector3[]
         {
+            //Afuera
+
             // Triangle 1
             new Vector3(0,0,0),
-            new Vector3(0,3,0),
-            new Vector3(4.6f,3,0),
+            new Vector3(0,height,0),
+            new Vector3(4.6f,height,0),
             
             // Triangle 2
             new Vector3(0,0,0),
-            new Vector3(4.6f,3,0),
+            new Vector3(4.6f,height,0),
             new Vector3(4.6f,0,0),
 
             // Triangle 3
             new Vector3(4.6f,2,0),
-            new Vector3(4.6f,3,0),
-            new Vector3(5.4f,3,0),
+            new Vector3(4.6f,height,0),
+            new Vector3(5.4f,height,0),
 
             // Triangle 4
             new Vector3(5.4f,2,0),
             new Vector3(4.6f,2,0),
-            new Vector3(5.4f,3,0),
+            new Vector3(5.4f,height,0),
             
             // Triangle 5
-            new Vector3(5.4f,3,0),
-            new Vector3(5.9f,3,0),
+            new Vector3(5.4f,height,0),
+            new Vector3(5.9f,height,0),
             new Vector3(5.4f,0,0),
 
             // Triangle 6
             new Vector3(5.9f,0,0),
             new Vector3(5.4f,0,0),
-            new Vector3(5.9f,3,0),
+            new Vector3(5.9f,height,0),
 
             // Triangle 7
-            new Vector3(5.9f,3,0),
-            new Vector3(7.4f,3,0),
+            new Vector3(5.9f,height,0),
+            new Vector3(7.4f,height,0),
             new Vector3(5.9f,2,0),
 
             // Triangle 8
             new Vector3(5.9f,2,0),
-            new Vector3(7.4f,3,0),
+            new Vector3(7.4f,height,0),
             new Vector3(7.4f,2,0),
 
             // Triangle 9
@@ -158,30 +160,140 @@ public class Projecto1 : MonoBehaviour
 
             // Triangle 11
             new Vector3(7.4f,0,0),
-            new Vector3(7.4f,3,0),
-            new Vector3(10,3,0),
+            new Vector3(7.4f,height,0),
+            new Vector3(width,height,0),
 
             // Triangle 12
-            new Vector3(10,3,0),
-            new Vector3(10,0,0),
+            new Vector3(width,height,0),
+            new Vector3(width,0,0),
             new Vector3(7.4f,0,0),
 
+            //Adentro
+
+            // Triangle 
+            new Vector3(width-wallThickness,0,wallThickness),
+            new Vector3(width-wallThickness,height,wallThickness),
+            new Vector3(7.4f,0,wallThickness),
+
+            // Triangle 
+            new Vector3(7.4f,0,wallThickness),
+            new Vector3(width - wallThickness,height,wallThickness),
+            new Vector3(7.4f,height,wallThickness),
+
+            // Triangle 
+            new Vector3(7.4f,0,wallThickness),
+            new Vector3(7.4f,1,wallThickness),
+            new Vector3(5.9f,0,wallThickness),
+
+            // Triangle 
+            new Vector3(5.9f,0,wallThickness),
+            new Vector3(7.4f,1,wallThickness),
+            new Vector3(5.9f,1,wallThickness),
+
+            // Triangle 
+            new Vector3(7.4f,2,wallThickness),
+            new Vector3(7.4f,height,wallThickness),
+            new Vector3(5.9f,2,wallThickness),
+
+            // Triangle 
+            new Vector3(5.9f,2,wallThickness),
+            new Vector3(7.4f,height,wallThickness),
+            new Vector3(5.9f,height,wallThickness),
+
+            // Triangle 
+            new Vector3(5.4f,0,wallThickness),
+            new Vector3(5.9f,0,wallThickness),
+            new Vector3(5.9f,height,wallThickness),
+
+            // Triangle 
+            new Vector3(5.4f,0,wallThickness),
+            new Vector3(5.9f,height,wallThickness),
+            new Vector3(5.4f,height,wallThickness),
+
+            // Triangle 
+            new Vector3(4.6f,2,wallThickness),
+            new Vector3(5.4f,2,wallThickness),
+            new Vector3(5.4f,height,wallThickness),
+
+            // Triangle 
+            new Vector3(5.4f,height,wallThickness),
+            new Vector3(4.6f,height,wallThickness),
+            new Vector3(4.6f,2,wallThickness),
+
+            // Triangle 
+            new Vector3(0 + wallThickness,0,wallThickness),
+            new Vector3(4.6f,0,wallThickness),
+            new Vector3(4.6f,height,wallThickness),
+
+            // Triangle 
+            new Vector3(4.6f,height,wallThickness),
+            new Vector3(0 + wallThickness,height,wallThickness),
+            new Vector3(0 + wallThickness,0,wallThickness),
+
+            // Bordes ventana
+
+            new Vector3(5.9f,1,0),
+            new Vector3(5.9f,1,wallThickness),
+            new Vector3(7.4f,1,0),
+
+            new Vector3(5.9f,1,wallThickness),
+            new Vector3(7.4f,1,wallThickness),
+            new Vector3(7.4f,1,0),
+
+            new Vector3(5.9f,1,0),
+            new Vector3(5.9f,2,0),
+            new Vector3(5.9f,2,wallThickness),
+
+            new Vector3(5.9f,1,0),
+            new Vector3(5.9f,2,wallThickness),
+            new Vector3(5.9f,1,wallThickness),
+            
+            new Vector3(5.9f,2,0),
+            new Vector3(7.4f,2,wallThickness),
+            new Vector3(5.9f,2,wallThickness),
+
+            new Vector3(5.9f,2,0),
+            new Vector3(7.4f,2,0),
+            new Vector3(7.4f,2,wallThickness),
+
+            new Vector3(7.4f,1,0),
+            new Vector3(7.4f,2,wallThickness),
+            new Vector3(7.4f,2,0),
+
+            new Vector3(7.4f,1,0),
+            new Vector3(7.4f,1,wallThickness),
+            new Vector3(7.4f,2,wallThickness),
+
+            //Bordes puerta
+
+            new Vector3(4.6f,0,0),
+            new Vector3(4.6f,2,0),
+            new Vector3(4.6f,0,wallThickness),
+
+            new Vector3(4.6f,0,wallThickness),
+            new Vector3(4.6f,2,0),
+            new Vector3(4.6f,2,wallThickness),
+
+            new Vector3(4.6f,2,wallThickness),
+            new Vector3(4.6f,2,0),
+            new Vector3(5.4f,2,0),
+
+            new Vector3(5.4f,2,0),
+            new Vector3(5.4f,2,wallThickness),
+            new Vector3(4.6f,2,wallThickness),
+
+            new Vector3(5.4f,0,0),
+            new Vector3(5.4f,0,wallThickness),
+            new Vector3(5.4f,2,wallThickness),
+
+            new Vector3(5.4f,2,wallThickness),
+            new Vector3(5.4f,2,0),
+            new Vector3(5.4f,0,0),
         };
-    
-        wall1Faces = new int[] {
-            0,1,2,
-            3,4,5,
-            6,7,8,
-            9,10,11,
-            12,13,14,
-            15,16,17,
-            18,19,20,
-            21,22,23,
-            24,25,26,
-            27,28,29,
-            30,31,32,
-            33,34,35
-        };
+
+        wall1Faces = new int[wall1Vertices.Length];
+        for (int i = 0; i < wall1Faces.Length; i++)
+            wall1Faces[i] = i;
 
         Color[] wall1Colors = new Color[wall1Vertices.Length];
         for (int i = 0; i < wall1Colors.Length; i++)
