@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Projecto1 : MonoBehaviour
 {
@@ -16,9 +18,37 @@ public class Projecto1 : MonoBehaviour
         createFloor();
         createCeiling();
         createWall1();
-        loadBed();
-        loadToilet();
         createCamera();
+        cargaMuebles();
+    }
+
+    private void cargaMuebles()
+    {
+        var (bed, bedHalf) = loadObject(
+            "muebles/beds/bed1/bed1",
+            "Bed1",
+            "bed1Texture"
+        );
+        changeposition(
+            bed,
+            new Vector3(width - wallThickness - bedHalf.x, bedHalf.y, depth - wallThickness - bedHalf.z),
+            new Vector3(0,0,0),
+            new Vector3(1,1,1)
+        );
+
+        Debug.Log($"bedHalf: {bedHalf.x}, {bedHalf.y}, {bedHalf.z}");
+
+        var (toilet, toiletHalf) = loadObject(
+            "muebles/Bathroom/toilets/toilet1/toilet1",
+            "toilet1",
+            "toilet1Texture"
+        );
+        changeposition(
+            toilet,
+            new Vector3(toiletHalf.x, toiletHalf.y, toiletHalf.z),
+            new Vector3(0,0,0),
+            new Vector3(1,1,1)
+        );
     }
 
     private void createFloor()
@@ -323,78 +353,39 @@ public class Projecto1 : MonoBehaviour
         myCamera.GetComponent<Camera>().backgroundColor = Color.black;
         myCamera.GetComponent<Camera>().nearClipPlane = 0.01f;
     }
-    private void loadBed()
+
+    private (GameObject obj, Vector3 halfExtents) loadObject(String path, String name, String texture)
     {
         FileReader fileReader = new FileReader();
-        fileReader.ReadFile("muebles/beds/bed1/bed1");
+        fileReader.ReadFile(path);
 
-        GameObject bed1 = new GameObject("Bed1");
-        bed1.AddComponent<MeshFilter>();
-        bed1.GetComponent<MeshFilter>().mesh = new Mesh();
-        bed1.AddComponent<MeshRenderer>();
+        GameObject obj = new GameObject(name);
+        obj.AddComponent<MeshFilter>();
+        obj.GetComponent<MeshFilter>().mesh = new Mesh();
+        obj.AddComponent<MeshRenderer>();
 
-        Mesh mesh = bed1.GetComponent<MeshFilter>().mesh;
+        Mesh mesh = obj.GetComponent<MeshFilter>().mesh;
         mesh.vertices = fileReader.GetVertexes();
         mesh.triangles = fileReader.GetFaces();
         mesh.uv = fileReader.GetUVs();
 
         // Cargar la textura desde Resources
-        Texture2D bedTexture = Resources.Load<Texture2D>("bed1Texture");
-        Debug.Log(bedTexture != null ? "Textura OK" : "Textura no encontrada");
-
-        Material mat = new Material(Shader.Find("SimpleShaderTexture")); // ← shader con textura
-        mat.mainTexture = bedTexture;
-        bed1.GetComponent<MeshRenderer>().material = mat;
-
-        Vector3 half = fileReader.GetHalfExtents();
-        Vector3 newPosition = new Vector3(
-            width - wallThickness - half.x,
-            half.y,
-            depth - wallThickness - half.z
-        );
-        Vector3 newRotation = new Vector3(0f, 0f, 0f);
-        Vector3 newScale = new Vector3(1f, 1f, 1f);
-
-        Matrix4x4 modelMatrix = CreateModelMatrix(newPosition, newRotation, newScale);
-
-        bed1.GetComponent<Renderer>().material.SetMatrix("_ModelMatrix", modelMatrix);
-    }
-
-    private void loadToilet()
-    {
-        FileReader fileReader = new FileReader();
-        fileReader.ReadFile("muebles/Bathroom/toilets/toilet1/toilet1");
-
-        GameObject toilet1 = new GameObject("toilet1");
-        toilet1.AddComponent<MeshFilter>();
-        toilet1.GetComponent<MeshFilter>().mesh = new Mesh();
-        toilet1.AddComponent<MeshRenderer>();
-
-        Mesh mesh = toilet1.GetComponent<MeshFilter>().mesh;
-        mesh.vertices = fileReader.GetVertexes();
-        mesh.triangles = fileReader.GetFaces();
-        mesh.uv = fileReader.GetUVs();
-
-        // Cargar la textura desde Resources
-        Texture2D toiletTexture = Resources.Load<Texture2D>("toilet1Texture");
+        Texture2D toiletTexture = Resources.Load<Texture2D>(texture);
         Debug.Log(toiletTexture != null ? "Textura OK" : "Textura no encontrada");
 
         Material mat = new Material(Shader.Find("SimpleShaderTexture")); // ← shader con textura
         mat.mainTexture = toiletTexture;
-        toilet1.GetComponent<MeshRenderer>().material = mat;
+        obj.GetComponent<MeshRenderer>().material = mat;
 
-        Vector3 half = fileReader.GetHalfExtents();
-        Vector3 newPosition = new Vector3(
-            width - wallThickness - half.x,
-            half.y,
-            depth - wallThickness - half.z
-        );
-        Vector3 newRotation = new Vector3(0f, 0f, 0f);
-        Vector3 newScale = new Vector3(1f, 1f, 1f);
+        Vector3 half = fileReader.GetHalfExtents(); 
+        
+        return (obj, half);
 
+    }
+
+    private void changeposition(GameObject obj,Vector3 newPosition, Vector3 newRotation, Vector3 newScale){
         Matrix4x4 modelMatrix = CreateModelMatrix(newPosition, newRotation, newScale);
-
-        toilet1.GetComponent<Renderer>().material.SetMatrix("_ModelMatrix", modelMatrix);
+        obj.GetComponent<Renderer>().material.SetMatrix("_ModelMatrix", modelMatrix);
 
     }
     private void UpdateMesh(GameObject gO,Vector3[] v,int[] f, Color[] c){
