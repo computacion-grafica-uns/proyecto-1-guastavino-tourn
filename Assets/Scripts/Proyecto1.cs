@@ -1,11 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class Projecto1 : MonoBehaviour
 {
     private GameObject myCamera;
-    private FileReader fileReader;
     private int width = 10;
     private int height = 3;
     private int depth = 10;
@@ -16,8 +16,8 @@ public class Projecto1 : MonoBehaviour
         createFloor();
         createCeiling();
         createWall1();
-        fileReader = new FileReader();
         loadBed();
+        loadToilet();
         createCamera();
     }
 
@@ -50,6 +50,8 @@ public class Projecto1 : MonoBehaviour
             3,4,5,
         };
 
+        
+
         Color[] floorColors = new Color[floorVertices.Length];
         for (int i = 0; i < floorColors.Length; i++)
         {
@@ -57,6 +59,15 @@ public class Projecto1 : MonoBehaviour
         }
 
         UpdateMesh(floor,floorVertices,floorFaces, floorColors);
+        
+        floor.GetComponent<MeshRenderer>().material = new Material(Shader.Find("FloorShader"));
+        Renderer r = floor.GetComponent<Renderer>();
+        r.material.SetFloat("_PlankWidth",   0.2f);
+        r.material.SetFloat("_PlankLength",  1.0f);
+        r.material.SetColor("_WoodLight",    new Color(0.76f, 0.60f, 0.42f));
+        r.material.SetColor("_WoodDark",     new Color(0.45f, 0.30f, 0.18f));
+        r.material.SetFloat("_VeinStrength", 0.3f);
+        r.material.SetFloat("_GapSize",      0.01f);
     }
 
     private void createCeiling()
@@ -312,9 +323,9 @@ public class Projecto1 : MonoBehaviour
         myCamera.GetComponent<Camera>().backgroundColor = Color.black;
         myCamera.GetComponent<Camera>().nearClipPlane = 0.01f;
     }
-
     private void loadBed()
     {
+        FileReader fileReader = new FileReader();
         fileReader.ReadFile("muebles/beds/bed1/bed1");
 
         GameObject bed1 = new GameObject("Bed1");
@@ -349,6 +360,43 @@ public class Projecto1 : MonoBehaviour
         bed1.GetComponent<Renderer>().material.SetMatrix("_ModelMatrix", modelMatrix);
     }
 
+    private void loadToilet()
+    {
+        FileReader fileReader = new FileReader();
+        fileReader.ReadFile("muebles/Bathroom/toilets/toilet1/toilet1");
+
+        GameObject toilet1 = new GameObject("toilet1");
+        toilet1.AddComponent<MeshFilter>();
+        toilet1.GetComponent<MeshFilter>().mesh = new Mesh();
+        toilet1.AddComponent<MeshRenderer>();
+
+        Mesh mesh = toilet1.GetComponent<MeshFilter>().mesh;
+        mesh.vertices = fileReader.GetVertexes();
+        mesh.triangles = fileReader.GetFaces();
+        mesh.uv = fileReader.GetUVs();
+
+        // Cargar la textura desde Resources
+        Texture2D toiletTexture = Resources.Load<Texture2D>("toilet1Texture");
+        Debug.Log(toiletTexture != null ? "Textura OK" : "Textura no encontrada");
+
+        Material mat = new Material(Shader.Find("SimpleShaderTexture")); // ← shader con textura
+        mat.mainTexture = toiletTexture;
+        toilet1.GetComponent<MeshRenderer>().material = mat;
+
+        Vector3 half = fileReader.GetHalfExtents();
+        Vector3 newPosition = new Vector3(
+            width - wallThickness - half.x,
+            half.y,
+            depth - wallThickness - half.z
+        );
+        Vector3 newRotation = new Vector3(0f, 0f, 0f);
+        Vector3 newScale = new Vector3(1f, 1f, 1f);
+
+        Matrix4x4 modelMatrix = CreateModelMatrix(newPosition, newRotation, newScale);
+
+        toilet1.GetComponent<Renderer>().material.SetMatrix("_ModelMatrix", modelMatrix);
+
+    }
     private void UpdateMesh(GameObject gO,Vector3[] v,int[] f, Color[] c){
         gO.GetComponent<MeshFilter>().mesh.vertices = v;
         gO.GetComponent<MeshFilter>().mesh.triangles = f;
