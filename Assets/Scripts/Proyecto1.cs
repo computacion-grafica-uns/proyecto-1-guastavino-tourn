@@ -12,10 +12,13 @@ public class Projecto1 : MonoBehaviour
     private int height = 3;
     private int depth = 10;
     private float wallThickness = 0.15f;
+    private float bathroomWidth = 4;
+    private float bathroomDepth = 4.5f;
 
     void Start()
     {
         createFloor();
+        createBathroom();
         createCeiling();
         createWall1();
         createCamera();
@@ -63,31 +66,37 @@ public class Projecto1 : MonoBehaviour
         floorVertices = new Vector3[]
         {
             // Triangle 1
-            new Vector3(0,0,0),
-            new Vector3(0,0,depth),
+            new Vector3(bathroomWidth,0,0),
+            new Vector3(bathroomWidth,0,depth),
             new Vector3(width,0,0),
-            
 
             // Triangle 2
-            new Vector3(0,0,depth),
+            new Vector3(bathroomWidth,0,depth),
             new Vector3(width,0,depth),
             new Vector3(width,0,0),
+
+             // Triangle 3
+            new Vector3(0,0,bathroomDepth),
+            new Vector3(0,0,depth),
+            new Vector3(bathroomWidth,0,bathroomDepth),
+
+            // Triangle 4
+            new Vector3(0,0,depth),
+            new Vector3(bathroomWidth,0,depth),
+            new Vector3(bathroomWidth,0,bathroomDepth),
 
         };
     
         floorFaces = new int[] {
             0,1,2,
             3,4,5,
+            6,7,8,
+            9,10,11
         };
 
-        
 
-        Color[] floorColors = new Color[floorVertices.Length];
-        for (int i = 0; i < floorColors.Length; i++)
-        {
-            floorColors[i] = floorColors[i] = new Color(237f / 255f, 195f / 255f, 133f / 255f);
-        }
 
+        Color[] floorColors = new Color[0];
         UpdateMesh(floor,floorVertices,floorFaces, floorColors);
         
         floor.GetComponent<MeshRenderer>().material = new Material(Shader.Find("FloorShader"));
@@ -344,6 +353,125 @@ public class Projecto1 : MonoBehaviour
 
         UpdateMesh(wall1,wall1Vertices,wall1Faces, wall1Colors);
     }
+
+    private void createBathroom()
+    {
+        createBathroomFloor();
+        createBathroomWalls();
+    }
+    private void createBathroomFloor()
+    {
+        Vector3[] bathroomFloorVertices;
+        int[] bathroomFloorFaces;
+        GameObject bathroomFloor;
+        bathroomFloor = new GameObject("Floor");
+        bathroomFloor.AddComponent<MeshFilter>();
+        bathroomFloor.GetComponent<MeshFilter>().mesh = new Mesh();
+        bathroomFloor.AddComponent<MeshRenderer>();
+        bathroomFloorVertices = new Vector3[]
+        {
+            // Triangle 1
+            new Vector3(wallThickness,0,wallThickness),
+            new Vector3(wallThickness,0,bathroomDepth - wallThickness),
+            new Vector3(bathroomWidth - wallThickness,0,wallThickness),
+
+            // Triangle 2
+            new Vector3(wallThickness,0,bathroomDepth - wallThickness),
+            new Vector3(bathroomWidth - wallThickness,0, bathroomDepth - wallThickness),
+            new Vector3(bathroomWidth - wallThickness,0,0),
+
+        };
+
+        bathroomFloorFaces = new int[bathroomFloorVertices.Length];
+        for (int i = 0; i < bathroomFloorFaces.Length; i++)
+            bathroomFloorFaces[i] = i;
+
+        Color[] bathroomFloorColors = new Color[0];
+        UpdateMesh(bathroomFloor, bathroomFloorVertices, bathroomFloorFaces, bathroomFloorColors);
+
+        bathroomFloor.GetComponent<MeshRenderer>().material = new Material(Shader.Find("BathroomFloorShader"));
+        Renderer r = bathroomFloor.GetComponent<Renderer>();
+        r.material.SetFloat("_TileSize", 0.5f);
+        r.material.SetFloat("_GapSize", 0.02f);
+        r.material.SetColor("_TileLight", new Color(0.92f, 0.92f, 0.92f));
+        r.material.SetColor("_TileDark", new Color(0.75f, 0.75f, 0.78f));
+        r.material.SetColor("_GroutColor", new Color(0.30f, 0.30f, 0.30f));
+        r.material.SetFloat("_Glossiness", 0.85f);
+        r.material.SetFloat("_VariationStr", 0.1f);
+    }
+
+    private void createBathroomWalls()
+    {
+        createFrontBathroomWall();
+        createSideBathroomWall();
+    }
+    private void createFrontBathroomWall()
+    {
+        Vector3[] frontBathroomWallVertices;
+        int[] frontBathroomWallFaces;
+        GameObject frontBathroomWall;
+        frontBathroomWall = new GameObject("BathroomFrontWall");
+        frontBathroomWall.AddComponent<MeshFilter>();
+        frontBathroomWall.GetComponent<MeshFilter>().mesh = new Mesh();
+        frontBathroomWall.AddComponent<MeshRenderer>();
+        frontBathroomWallVertices = new Vector3[]
+        {
+            //FALTA PUERTA
+            new Vector3(bathroomWidth-wallThickness,0,bathroomDepth-wallThickness),
+            new Vector3(bathroomWidth-wallThickness,height,bathroomDepth-wallThickness),
+            new Vector3(bathroomWidth-wallThickness,0,wallThickness),
+
+            new Vector3(bathroomWidth-wallThickness,height,bathroomDepth-wallThickness),
+            new Vector3(bathroomWidth-wallThickness,0,wallThickness),
+            new Vector3(bathroomWidth-wallThickness,height,wallThickness),
+        };
+
+        frontBathroomWallFaces = new int[frontBathroomWallVertices.Length];
+        for (int i = 0; i < frontBathroomWallFaces.Length; i++)
+            frontBathroomWallFaces[i] = i;
+
+        Color[] frontBathroomWallsColors = new Color[0];
+
+        UpdateMesh(frontBathroomWall, frontBathroomWallVertices, frontBathroomWallFaces, frontBathroomWallsColors);
+    }
+
+    private void createSideBathroomWall()
+    {
+        Vector3[] sideBathroomWallVertices;
+        int[] sideBathroomWallFaces;
+        GameObject sideBathroomWall;
+        sideBathroomWall = new GameObject("BathroomSideWall");
+        sideBathroomWall.AddComponent<MeshFilter>();
+        sideBathroomWall.GetComponent<MeshFilter>().mesh = new Mesh();
+        sideBathroomWall.AddComponent<MeshRenderer>();
+        sideBathroomWallVertices = new Vector3[]
+        {
+            new Vector3(wallThickness,0,bathroomDepth-wallThickness),
+            new Vector3(wallThickness,height,bathroomDepth-wallThickness),
+            new Vector3(bathroomWidth - wallThickness,0,bathroomDepth-wallThickness),
+
+            new Vector3(bathroomWidth - wallThickness,0,bathroomDepth-wallThickness),
+            new Vector3(wallThickness,height,bathroomDepth-wallThickness),
+            new Vector3(bathroomWidth - wallThickness,height,bathroomDepth-wallThickness),
+
+            new Vector3(bathroomWidth,0,bathroomDepth),
+            new Vector3(bathroomWidth,height,bathroomDepth),
+            new Vector3(wallThickness,0,bathroomDepth),
+
+            new Vector3(bathroomWidth,height,bathroomDepth),
+            new Vector3(wallThickness,0,bathroomDepth),
+            new Vector3(wallThickness,height,bathroomDepth),
+        };
+
+        sideBathroomWallFaces = new int[sideBathroomWallVertices.Length];
+        for (int i = 0; i < sideBathroomWallFaces.Length; i++)
+            sideBathroomWallFaces[i] = i;
+
+        Color[] sideBathroomWallsColors = new Color[0];
+
+        UpdateMesh(sideBathroomWall, sideBathroomWallVertices, sideBathroomWallFaces, sideBathroomWallsColors);
+    }
+
     private void createCamera(){
         myCamera = new GameObject("Camera");
         myCamera.AddComponent<Camera>();
