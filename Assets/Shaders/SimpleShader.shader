@@ -4,7 +4,7 @@ Shader "SimpleShader"
 	{
 		Pass 
 		{
-			Cull off
+			//Cull off
 
 			CGPROGRAM
 
