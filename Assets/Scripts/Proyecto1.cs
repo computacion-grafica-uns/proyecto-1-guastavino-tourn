@@ -17,11 +17,20 @@ public class Projecto1 : MonoBehaviour
         createWalls();
         createBathroom();
         createCeiling();
-        cargaMuebles();
+        createFurniture();
         createCamera();
     }
 
-    private void cargaMuebles()
+    private void createFurniture()
+    {
+        createBed();
+        createWardrobeSofa();
+        createBathroomFurniture();
+        createKitchenFurniture();
+        createChairsAndTables();
+    }
+
+    private void createBed()
     {
         var (bed, bedHalf) = loadObject(
             "muebles/beds/bed1/bed1",
@@ -33,9 +42,85 @@ public class Projecto1 : MonoBehaviour
             new Vector3(width - wallThickness - bedHalf.x, bedHalf.y, depth - wallThickness - bedHalf.z),
             new Vector3(0, 0, 0),
             new Vector3(1, 1, 1)
-        );
+        );        
+    }
 
-        Debug.Log($"bedHalf: {bedHalf.x}, {bedHalf.y}, {bedHalf.z}");
+    private void createWardrobeSofa()
+    {    
+        var (sofa, sofaHalf) = loadObject(
+            "muebles/sofa`s/sofa90degrees/90degreesSofa",
+            "sofa",
+            "sofa90degreesTextureBlue"
+        );
+        changeposition(
+            sofa,
+            new Vector3(width - wallThickness - sofaHalf.x, sofaHalf.y,  wallThickness + sofaHalf.z),
+            new Vector3(0, -90* Mathf.Deg2Rad, 0),
+            new Vector3(1, 1, 1)
+        );  
+
+        // var (wardrobe2, wardrobe2Half) = loadObject(
+        //     "muebles/Wardrobes/Wardrobe2/Wardrobe2",
+        //     "wardrobe2",
+        //     "Wardrobe2Texture"
+        // );
+        // changeposition(
+        //     wardrobe2,
+        //     new Vector3(width - wallThickness - wardrobe2Half.x, wardrobe2Half.y,  wallThickness + wardrobe2Half.z + sofaHalf.z*2 + 0.5f),
+        //     new Vector3(0, 180* Mathf.Deg2Rad, 0),
+        //     new Vector3(1, 1, 1)
+        // ); 
+
+        var (halfWardrobe, wardrobe2Half) = loadObject(
+            "muebles/Wardrobes/HalfWardrobe/HalfWardrobe",
+            "HalfWardrobe",
+            "HalfWardrobeTexture"
+        );
+        changeposition(
+            halfWardrobe,
+            new Vector3(width - wallThickness - wardrobe2Half.x, wardrobe2Half.y,  wallThickness + wardrobe2Half.z + sofaHalf.z*2 + 0.5f),
+            new Vector3(0, 180* Mathf.Deg2Rad, 0),
+            new Vector3(1, 1, 1)
+        ); 
+
+
+        var (wardrobe1, wardrobe1Half) = loadObject(
+            "muebles/Wardrobes/Wardrobe1/Wardrobe1",
+            "wardrobe1",
+            "Wardrobe1Texture"
+        );
+        changeposition(
+            wardrobe1,
+            new Vector3(width - wallThickness - wardrobe1Half.x, wardrobe1Half.y,  wallThickness + wardrobe1Half.z + wardrobe2Half.z*2 + sofaHalf.z*2 + 0.8f ),
+            new Vector3(0, 180* Mathf.Deg2Rad, 0),
+            new Vector3(1, 1, 1)
+        );  
+
+        var (littleOne, littleOneHalf) = loadObject(
+            "muebles/Wardrobes/littleOne/littleOne",
+            "littleOne",
+            "littleOneTexture"
+        );
+        changeposition(
+            littleOne,
+            new Vector3(width - wallThickness - sofaHalf.x *2 - littleOneHalf.x - 0.1f, littleOneHalf.y,  wallThickness + littleOneHalf.z),
+            new Vector3(0, -90* Mathf.Deg2Rad, 0),
+            new Vector3(1, 1, 1)
+        );
+    }
+    private void createBathroomFurniture()
+    {
+        var (bath, bathHalf) = loadObject(
+            "muebles/Bathroom/bath/bath",
+            "bath",
+            "BathTexture"
+        );
+        changeposition(
+            bath,
+            new Vector3(bathHalf.z + 0.2f, bathHalf.y, bathHalf.x + 0.5f),
+            new Vector3(0, 90 * Mathf.Deg2Rad, 0),
+            new Vector3(1, 1, 1)
+        );
 
         var (toilet, toiletHalf) = loadObject(
             "muebles/Bathroom/toilets/toilet1/toilet1",
@@ -44,12 +129,150 @@ public class Projecto1 : MonoBehaviour
         );
         changeposition(
             toilet,
-            new Vector3(toiletHalf.x + 0.2f, toiletHalf.y, toiletHalf.z + 0.5f),
+            new Vector3(toiletHalf.x + 0.2f, toiletHalf.y, bathHalf.x * 2 + toiletHalf.z + 1f),
+            new Vector3(0, 0, 0),
+            new Vector3(1, 1, 1)
+        );
+
+        var (sink, sinkHalf) = loadObject(
+            "muebles/Bathroom/sink/sink",
+            "sink",
+            "sinkTexture"
+        );
+        changeposition(
+            sink,
+            new Vector3(sinkHalf.x + 0.2f, sinkHalf.y, bathHalf.x * 2 + toiletHalf.z * 2 + sinkHalf.z + 1.3f),
+            new Vector3(0, 0, 0),
+            new Vector3(1, 1, 1)
+        );
+
+        var (mirror, mirrorHalf) = loadObject(
+            "muebles/Bathroom/mirror/mirror",
+            "mirror",
+            "mirrorTexture"
+        );
+        changeposition(
+            mirror,
+            new Vector3(mirrorHalf.x + 0.2f, mirrorHalf.y+1.5f, bathHalf.x * 2 + toiletHalf.z * 2 + sinkHalf.z + 1.3f),
             new Vector3(0, 0, 0),
             new Vector3(1, 1, 1)
         );
     }
 
+    private void createKitchenFurniture()
+    {
+        var (KitchenCabinetRounded, KitchenCabinetRoundedHalf) = loadObject(
+            "muebles/Kitchen/Cabinets/KitchenCabinetRounded/KitchenCabinetRounded",
+            "KitchenCabinetRounded",
+            "CabinetRoundedTexture"
+        );
+        changeposition(
+            KitchenCabinetRounded,
+            new Vector3( wallThickness + KitchenCabinetRoundedHalf.x, KitchenCabinetRoundedHalf.y, depth - wallThickness - KitchenCabinetRoundedHalf.z),
+            new Vector3(0, 0, 0),
+            new Vector3(1, 1, 1)
+        ); 
+
+        var (KitchenStove2, KitchenStove2Half) = loadObject(
+            "muebles/Kitchen/Cabinets/KitchenStove2/KitchenStove2",
+            "KitchenStove2",
+            "KitchenStove2Texture"
+        );
+        changeposition(
+            KitchenStove2,
+            new Vector3( wallThickness + KitchenStove2Half.x, KitchenStove2Half.y, depth - wallThickness - KitchenCabinetRoundedHalf.z * 2 - KitchenStove2Half.z),
+            new Vector3(0, 0, 0),
+            new Vector3(1, 1, 1)
+        ); 
+        
+        var (KitchenCabinetWithOven, KitchenCabinetWithOvenHalf) = loadObject(
+            "muebles/Kitchen/Cabinets/KitchenCabinetWithOven/KitchenCabinetWithOven",
+            "KitchenCabinetWithOven",
+            "KitchenCabinetWithOvenTexture"
+        );
+        changeposition(
+            KitchenCabinetWithOven,
+            new Vector3( wallThickness + KitchenCabinetWithOvenHalf.x, KitchenCabinetWithOvenHalf.y, depth - wallThickness - KitchenCabinetRoundedHalf.z * 2 - KitchenStove2Half.z * 2 - KitchenCabinetWithOvenHalf.z),
+            new Vector3(0, 0, 0),
+            new Vector3(1, 1, 1)
+        ); 
+
+        var (KitchenCabinet1, KitchenCabinet1Half) = loadObject(
+            "muebles/Kitchen/Cabinets/KitchenCabinet1/KitchenCabinet1",
+            "KitchenCabinet1",
+            "KitchenCabinet1Texture"
+        );
+        changeposition(
+            KitchenCabinet1,
+            new Vector3( wallThickness + KitchenCabinetWithOvenHalf.x, KitchenCabinetWithOvenHalf.y, depth - wallThickness - KitchenCabinetRoundedHalf.z * 2 - KitchenStove2Half.z * 2 - KitchenCabinetWithOvenHalf.z*2 - KitchenCabinet1Half.z),
+            new Vector3(0, 0, 0),
+            new Vector3(1, 1, 1)
+        ); 
+
+        var (UpperCabinet, UpperCabinetHalf) = loadObject(
+            "muebles/Kitchen/Cabinets/90DegreesUpperCabinet/90DegreesUpperCabinet",
+            "UpperCabinet",
+            "90degreesUpperCabinetTexture"
+        );
+        changeposition(
+            UpperCabinet,
+            new Vector3( wallThickness + UpperCabinetHalf.x, height-UpperCabinetHalf.y-0.05f, depth - wallThickness - UpperCabinetHalf.z ),
+            new Vector3(0, 0, 0),
+            new Vector3(1, 1, 1)
+        ); 
+
+        var (Fridge, FridgeHalf) = loadObject(
+            "muebles/Kitchen/Fridge/Fridge",
+            "Fridge",
+            "FridgeTexture"
+        );
+        changeposition(
+            Fridge,
+            new Vector3( wallThickness + KitchenCabinetRoundedHalf.x * 2 + FridgeHalf.x, FridgeHalf.y, depth - wallThickness - FridgeHalf.z ),
+            new Vector3(0, 90 * Mathf.Deg2Rad, 0),
+            new Vector3(1, 1, 1)
+        ); 
+    }
+    
+    private void createChairsAndTables()
+    {
+        var (table, tableHalf) = loadObject(
+            "muebles/tables/table/table",
+            "table",
+            "tableTexture"
+        );
+        changeposition(
+            table,
+            new Vector3(width - wallThickness - tableHalf.x - 3f, tableHalf.y, depth - wallThickness - tableHalf.z),
+            new Vector3(0, 0, 0),
+            new Vector3(1, 1, 1)
+        ); 
+
+        var (chair1, chair1Half) = loadObject(
+            "muebles/chairs/chair1/chair1",
+            "chair1",
+            "chair1Texture"
+        );
+        changeposition(
+            chair1,
+            new Vector3(width - wallThickness - chair1Half.x - 2.7f - tableHalf.x *2, chair1Half.y, depth - wallThickness - tableHalf.z),
+            new Vector3(0, 0, 0),
+            new Vector3(1, 1, 1)
+        ); 
+
+        var (chair2, chair2Half) = loadObject(
+            "muebles/chairs/chair1/chair1",
+            "chair2",
+            "chair1Texture"
+        );
+        changeposition(
+            chair2,
+            new Vector3(width - wallThickness - chair2Half.x - 2.7f, chair2Half.y, depth - wallThickness - tableHalf.z),
+            new Vector3(0, 180* Mathf.Deg2Rad, 0),
+            new Vector3(1, 1, 1)
+        ); 
+
+    }
     private void createFloor()
     {
         Vector3[] floorVertices;
