@@ -37,7 +37,7 @@ public class Projecto1 : MonoBehaviour
             "Bed1",
             "bed1Texture"
         );
-        changeposition(
+        changePosition(
             bed,
             new Vector3(width - wallThickness - bedHalf.x, bedHalf.y, depth - wallThickness - bedHalf.z),
             new Vector3(0, 0, 0),
@@ -52,7 +52,7 @@ public class Projecto1 : MonoBehaviour
             "sofa",
             "sofa90degreesTextureBlue"
         );
-        changeposition(
+        changePosition(
             sofa,
             new Vector3(width - wallThickness - sofaHalf.x, sofaHalf.y,  wallThickness + sofaHalf.z),
             new Vector3(0, -90* Mathf.Deg2Rad, 0),
@@ -76,7 +76,7 @@ public class Projecto1 : MonoBehaviour
             "HalfWardrobe",
             "HalfWardrobeTexture"
         );
-        changeposition(
+        changePosition(
             halfWardrobe,
             new Vector3(width - wallThickness - wardrobe2Half.x, wardrobe2Half.y,  wallThickness + wardrobe2Half.z + sofaHalf.z*2 + 0.5f),
             new Vector3(0, 180* Mathf.Deg2Rad, 0),
@@ -89,7 +89,7 @@ public class Projecto1 : MonoBehaviour
             "wardrobe1",
             "Wardrobe1Texture"
         );
-        changeposition(
+        changePosition(
             wardrobe1,
             new Vector3(width - wallThickness - wardrobe1Half.x, wardrobe1Half.y,  wallThickness + wardrobe1Half.z + wardrobe2Half.z*2 + sofaHalf.z*2 + 0.8f ),
             new Vector3(0, 180* Mathf.Deg2Rad, 0),
@@ -101,7 +101,7 @@ public class Projecto1 : MonoBehaviour
             "littleOne",
             "littleOneTexture"
         );
-        changeposition(
+        changePosition(
             littleOne,
             new Vector3(width - wallThickness - sofaHalf.x *2 - littleOneHalf.x - 0.1f, littleOneHalf.y,  wallThickness + littleOneHalf.z),
             new Vector3(0, -90* Mathf.Deg2Rad, 0),
@@ -115,7 +115,7 @@ public class Projecto1 : MonoBehaviour
             "bath",
             "BathTexture"
         );
-        changeposition(
+        changePosition(
             bath,
             new Vector3(bathHalf.z + 0.2f, bathHalf.y, bathHalf.x + 0.5f),
             new Vector3(0, 90 * Mathf.Deg2Rad, 0),
@@ -127,7 +127,7 @@ public class Projecto1 : MonoBehaviour
             "toilet1",
             "toilet1Texture"
         );
-        changeposition(
+        changePosition(
             toilet,
             new Vector3(toiletHalf.x + 0.2f, toiletHalf.y, bathHalf.x * 2 + toiletHalf.z + 1f),
             new Vector3(0, 0, 0),
@@ -139,7 +139,7 @@ public class Projecto1 : MonoBehaviour
             "sink",
             "sinkTexture"
         );
-        changeposition(
+        changePosition(
             sink,
             new Vector3(sinkHalf.x + 0.2f, sinkHalf.y, bathHalf.x * 2 + toiletHalf.z * 2 + sinkHalf.z + 1.3f),
             new Vector3(0, 0, 0),
@@ -151,7 +151,7 @@ public class Projecto1 : MonoBehaviour
             "mirror",
             "mirrorTexture"
         );
-        changeposition(
+        changePosition(
             mirror,
             new Vector3(mirrorHalf.x + 0.2f, mirrorHalf.y+1.5f, bathHalf.x * 2 + toiletHalf.z * 2 + sinkHalf.z + 1.3f),
             new Vector3(0, 0, 0),
@@ -166,7 +166,7 @@ public class Projecto1 : MonoBehaviour
             "KitchenCabinetRounded",
             "CabinetRoundedTexture"
         );
-        changeposition(
+        changePosition(
             KitchenCabinetRounded,
             new Vector3( wallThickness + KitchenCabinetRoundedHalf.x, KitchenCabinetRoundedHalf.y, depth - wallThickness - KitchenCabinetRoundedHalf.z),
             new Vector3(0, 0, 0),
@@ -178,7 +178,7 @@ public class Projecto1 : MonoBehaviour
             "KitchenStove2",
             "KitchenStove2Texture"
         );
-        changeposition(
+        changePosition(
             KitchenStove2,
             new Vector3( wallThickness + KitchenStove2Half.x, KitchenStove2Half.y, depth - wallThickness - KitchenCabinetRoundedHalf.z * 2 - KitchenStove2Half.z),
             new Vector3(0, 0, 0),
@@ -190,7 +190,7 @@ public class Projecto1 : MonoBehaviour
             "KitchenCabinetWithOven",
             "KitchenCabinetWithOvenTexture"
         );
-        changeposition(
+        changePosition(
             KitchenCabinetWithOven,
             new Vector3( wallThickness + KitchenCabinetWithOvenHalf.x, KitchenCabinetWithOvenHalf.y, depth - wallThickness - KitchenCabinetRoundedHalf.z * 2 - KitchenStove2Half.z * 2 - KitchenCabinetWithOvenHalf.z),
             new Vector3(0, 0, 0),
@@ -202,7 +202,7 @@ public class Projecto1 : MonoBehaviour
             "KitchenCabinet1",
             "KitchenCabinet1Texture"
         );
-        changeposition(
+        changePosition(
             KitchenCabinet1,
             new Vector3( wallThickness + KitchenCabinetWithOvenHalf.x, KitchenCabinetWithOvenHalf.y, depth - wallThickness - KitchenCabinetRoundedHalf.z * 2 - KitchenStove2Half.z * 2 - KitchenCabinetWithOvenHalf.z*2 - KitchenCabinet1Half.z),
             new Vector3(0, 0, 0),
@@ -214,7 +214,7 @@ public class Projecto1 : MonoBehaviour
             "UpperCabinet",
             "90degreesUpperCabinetTexture"
         );
-        changeposition(
+        changePosition(
             UpperCabinet,
             new Vector3( wallThickness + UpperCabinetHalf.x, height-UpperCabinetHalf.y-0.05f, depth - wallThickness - UpperCabinetHalf.z ),
             new Vector3(0, 0, 0),
@@ -226,7 +226,7 @@ public class Projecto1 : MonoBehaviour
             "Fridge",
             "FridgeTexture"
         );
-        changeposition(
+        changePosition(
             Fridge,
             new Vector3( wallThickness + KitchenCabinetRoundedHalf.x * 2 + FridgeHalf.x, FridgeHalf.y, depth - wallThickness - FridgeHalf.z ),
             new Vector3(0, 90 * Mathf.Deg2Rad, 0),
@@ -241,7 +241,7 @@ public class Projecto1 : MonoBehaviour
             "table",
             "tableTexture"
         );
-        changeposition(
+        changePosition(
             table,
             new Vector3(width - wallThickness - tableHalf.x - 3f, tableHalf.y, depth - wallThickness - tableHalf.z),
             new Vector3(0, 0, 0),
@@ -253,7 +253,7 @@ public class Projecto1 : MonoBehaviour
             "chair1",
             "chair1Texture"
         );
-        changeposition(
+        changePosition(
             chair1,
             new Vector3(width - wallThickness - chair1Half.x - 2.7f - tableHalf.x *2, chair1Half.y, depth - wallThickness - tableHalf.z),
             new Vector3(0, 0, 0),
@@ -265,7 +265,7 @@ public class Projecto1 : MonoBehaviour
             "chair2",
             "chair1Texture"
         );
-        changeposition(
+        changePosition(
             chair2,
             new Vector3(width - wallThickness - chair2Half.x - 2.7f, chair2Half.y, depth - wallThickness - tableHalf.z),
             new Vector3(0, 180* Mathf.Deg2Rad, 0),
@@ -327,6 +327,8 @@ public class Projecto1 : MonoBehaviour
     {
         createFrontWall();
         createLeftWall();
+        createBackWall();
+        createRightWall();
     }
 
     private void createFrontWall()
@@ -538,12 +540,55 @@ public class Projecto1 : MonoBehaviour
         UpdateMesh(frontWall, frontVertices, frontFaces, frontColors);
     }
 
+    private void createBackWall()
+    {
+        Vector3[] backWallVertices;
+        int[] backWallFaces;
+        GameObject backWall;
+        backWall = new GameObject("BackWall");
+        backWall.AddComponent<MeshFilter>();
+        backWall.GetComponent<MeshFilter>().mesh = new Mesh();
+        backWall.AddComponent<MeshRenderer>();
+        backWallVertices = new Vector3[]
+        {
+            // Exterior
+            new Vector3(width,0,depth),
+            new Vector3(width,height,depth),
+            new Vector3(0,0,depth),
+
+            new Vector3(0,0,depth),
+            new Vector3(width,height,depth),
+            new Vector3(0,height,depth),
+
+            // Interior
+            new Vector3(wallThickness,0,depth-wallThickness),
+            new Vector3(wallThickness,height,depth-wallThickness),
+            new Vector3(width - wallThickness,0,depth-wallThickness),
+
+            new Vector3(width - wallThickness,0,depth-wallThickness),
+            new Vector3(wallThickness,height,depth-wallThickness),
+            new Vector3(width - wallThickness,height,depth-wallThickness),
+        };
+
+        backWallFaces = new int[backWallVertices.Length];
+        for (int i = 0; i < backWallFaces.Length; i++)
+            backWallFaces[i] = i;
+
+        Color[] backWallColors = new Color[backWallVertices.Length];
+        for (int i = 0; i < backWallColors.Length; i++)
+        {
+            backWallColors[i] = backWallColors[i] = new Color(243f / 255f, 243f / 255f, 243f / 255f);
+        }
+
+        UpdateMesh(backWall, backWallVertices, backWallFaces, backWallColors);
+    }
+
     private void createLeftWall()
     {
         Vector3[] leftWallVertices;
         int[] leftWallFaces;
         GameObject leftWall;
-        leftWall = new GameObject("FrontWall");
+        leftWall = new GameObject("LeftWall");
         leftWall.AddComponent<MeshFilter>();
         leftWall.GetComponent<MeshFilter>().mesh = new Mesh();
         leftWall.AddComponent<MeshRenderer>();
@@ -579,6 +624,49 @@ public class Projecto1 : MonoBehaviour
         }
 
         UpdateMesh(leftWall, leftWallVertices, leftWallFaces, leftWallColors);
+    }
+
+    private void createRightWall()
+    {
+        Vector3[] rightWallVertices;
+        int[] rightWallFaces;
+        GameObject rightWall;
+        rightWall = new GameObject("RightWall");
+        rightWall.AddComponent<MeshFilter>();
+        rightWall.GetComponent<MeshFilter>().mesh = new Mesh();
+        rightWall.AddComponent<MeshRenderer>();
+        rightWallVertices = new Vector3[]
+        {
+            // Exterior
+            new Vector3(width,0,0),
+            new Vector3(width,height,0),
+            new Vector3(width,0,depth),
+
+            new Vector3(width,0,depth),
+            new Vector3(width,height,0),
+            new Vector3(width,height,depth),
+
+            // Interior
+            new Vector3(width-wallThickness,0,depth-wallThickness),
+            new Vector3(width-wallThickness,height,depth-wallThickness),
+            new Vector3(width-wallThickness,0,wallThickness),
+
+            new Vector3(width-wallThickness,0,wallThickness),
+            new Vector3(width-wallThickness,height,depth-wallThickness),
+            new Vector3(width-wallThickness,height,wallThickness),
+        };
+
+        rightWallFaces = new int[rightWallVertices.Length];
+        for (int i = 0; i < rightWallFaces.Length; i++)
+            rightWallFaces[i] = i;
+
+        Color[] rightWallColors = new Color[rightWallVertices.Length];
+        for (int i = 0; i < rightWallColors.Length; i++)
+        {
+            rightWallColors[i] = rightWallColors[i] = new Color(243f / 255f, 243f / 255f, 243f / 255f);
+        }
+
+        UpdateMesh(rightWall, rightWallVertices, rightWallFaces, rightWallColors);
     }
 
     private void createCeiling()
@@ -677,11 +765,11 @@ public class Projecto1 : MonoBehaviour
 
         Vector3[] frontWallVertices = createFrontBathroomWall();
         Vector3[] sideWallVertices = createSideBathroomWall();
-        Vector3[] bordersVertices = createBordersBathroomWalls();
-        bathroomWallsVertices = new Vector3[frontWallVertices.Length + sideWallVertices.Length + bordersVertices.Length];
+        Vector3[] doorBordersVertices = createBordersBathroomDoor();
+        bathroomWallsVertices = new Vector3[frontWallVertices.Length + sideWallVertices.Length + doorBordersVertices.Length];
         frontWallVertices.CopyTo(bathroomWallsVertices, 0);
         sideWallVertices.CopyTo(bathroomWallsVertices, frontWallVertices.Length);
-        bordersVertices.CopyTo(bathroomWallsVertices, frontWallVertices.Length + sideWallVertices.Length);
+        doorBordersVertices.CopyTo(bathroomWallsVertices, frontWallVertices.Length + sideWallVertices.Length);
 
         bathroomWallsFaces = new int[bathroomWallsVertices.Length];
         for (int i = 0; i < bathroomWallsFaces.Length; i++)
@@ -778,9 +866,9 @@ public class Projecto1 : MonoBehaviour
         return sideBathroomWallVertices;
     }
 
-    private Vector3[] createBordersBathroomWalls()
+    private Vector3[] createBordersBathroomDoor()
     {
-        Vector3[] bordersBathroomWallsVertices = new Vector3[]
+        Vector3[] bordersBathroomDoor = new Vector3[]
         {
             // Puerta
             new Vector3(bathroomWidth,0,bathroomDepth - wallThickness - 1f),
@@ -811,7 +899,7 @@ public class Projecto1 : MonoBehaviour
             // Ventana
         };
 
-        return bordersBathroomWallsVertices;
+        return bordersBathroomDoor;
     }
 
     private void createCamera(){
@@ -853,7 +941,7 @@ public class Projecto1 : MonoBehaviour
 
     }
 
-    private void changeposition(GameObject obj,Vector3 newPosition, Vector3 newRotation, Vector3 newScale){
+    private void changePosition(GameObject obj,Vector3 newPosition, Vector3 newRotation, Vector3 newScale){
         Matrix4x4 modelMatrix = CreateModelMatrix(newPosition, newRotation, newScale);
         obj.GetComponent<Renderer>().material.SetMatrix("_ModelMatrix", modelMatrix);
 
