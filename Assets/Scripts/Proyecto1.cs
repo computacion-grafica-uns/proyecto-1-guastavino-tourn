@@ -35,7 +35,8 @@ public class Projecto1 : MonoBehaviour
         var (bed, bedHalf) = loadObject(
             "muebles/beds/bed1/bed1",
             "Bed1",
-            "bed1Texture"
+            "bed1Texture",
+            rgba(59, 53, 92)
         );
         changePosition(
             bed,
@@ -50,7 +51,8 @@ public class Projecto1 : MonoBehaviour
         var (sofa, sofaHalf) = loadObject(
             "muebles/sofa`s/sofa90degrees/90degreesSofa",
             "sofa",
-            "sofa90degreesTextureBlue"
+            "sofa90degreesTextureBlue",
+            rgba(92, 93, 54)
         );
         changePosition(
             sofa,
@@ -74,7 +76,8 @@ public class Projecto1 : MonoBehaviour
         var (halfWardrobe, wardrobe2Half) = loadObject(
             "muebles/Wardrobes/HalfWardrobe/HalfWardrobe",
             "HalfWardrobe",
-            "HalfWardrobeTexture"
+            "HalfWardrobeTexture",
+            rgba(44, 30, 22)
         );
         changePosition(
             halfWardrobe,
@@ -87,7 +90,8 @@ public class Projecto1 : MonoBehaviour
         var (wardrobe1, wardrobe1Half) = loadObject(
             "muebles/Wardrobes/Wardrobe1/Wardrobe1",
             "wardrobe1",
-            "Wardrobe1Texture"
+            "Wardrobe1Texture",
+            rgba(30, 20, 15)  
         );
         changePosition(
             wardrobe1,
@@ -99,7 +103,8 @@ public class Projecto1 : MonoBehaviour
         var (littleOne, littleOneHalf) = loadObject(
             "muebles/Wardrobes/littleOne/littleOne",
             "littleOne",
-            "littleOneTexture"
+            "littleOneTexture",
+            rgba(44, 30, 22)
         );
         changePosition(
             littleOne,
@@ -113,7 +118,8 @@ public class Projecto1 : MonoBehaviour
         var (bath, bathHalf) = loadObject(
             "muebles/Bathroom/bath/bath",
             "bath",
-            "BathTexture"
+            "BathTexture",
+            rgba(103, 133, 171)
         );
         changePosition(
             bath,
@@ -125,7 +131,8 @@ public class Projecto1 : MonoBehaviour
         var (toilet, toiletHalf) = loadObject(
             "muebles/Bathroom/toilets/toilet1/toilet1",
             "toilet1",
-            "toilet1Texture"
+            "toilet1Texture",
+            rgba(141, 164, 192)
         );
         changePosition(
             toilet,
@@ -137,7 +144,8 @@ public class Projecto1 : MonoBehaviour
         var (sink, sinkHalf) = loadObject(
             "muebles/Bathroom/sink/sink",
             "sink",
-            "sinkTexture"
+            "sinkTexture",
+            rgba(141, 164, 192)
         );
         changePosition(
             sink,
@@ -149,7 +157,8 @@ public class Projecto1 : MonoBehaviour
         var (mirror, mirrorHalf) = loadObject(
             "muebles/Bathroom/mirror/mirror",
             "mirror",
-            "mirrorTexture"
+            "mirrorTexture",
+            rgba(84, 118, 161)
         );
         changePosition(
             mirror,
@@ -164,7 +173,8 @@ public class Projecto1 : MonoBehaviour
         var (KitchenCabinetRounded, KitchenCabinetRoundedHalf) = loadObject(
             "muebles/Kitchen/Cabinets/KitchenCabinetRounded/KitchenCabinetRounded",
             "KitchenCabinetRounded",
-            "CabinetRoundedTexture"
+            "CabinetRoundedTexture",
+            rgba(30, 20, 15)  
         );
         changePosition(
             KitchenCabinetRounded,
@@ -176,7 +186,8 @@ public class Projecto1 : MonoBehaviour
         var (KitchenStove2, KitchenStove2Half) = loadObject(
             "muebles/Kitchen/Cabinets/KitchenStove2/KitchenStove2",
             "KitchenStove2",
-            "KitchenStove2Texture"
+            "KitchenStove2Texture",
+            rgba(44, 30, 22)
         );
         changePosition(
             KitchenStove2,
@@ -188,7 +199,8 @@ public class Projecto1 : MonoBehaviour
         var (KitchenCabinetWithOven, KitchenCabinetWithOvenHalf) = loadObject(
             "muebles/Kitchen/Cabinets/KitchenCabinetWithOven/KitchenCabinetWithOven",
             "KitchenCabinetWithOven",
-            "KitchenCabinetWithOvenTexture"
+            "KitchenCabinetWithOvenTexture",
+            rgba(30, 20, 15)    
         );
         changePosition(
             KitchenCabinetWithOven,
@@ -200,7 +212,8 @@ public class Projecto1 : MonoBehaviour
         var (KitchenCabinet1, KitchenCabinet1Half) = loadObject(
             "muebles/Kitchen/Cabinets/KitchenCabinet1/KitchenCabinet1",
             "KitchenCabinet1",
-            "KitchenCabinet1Texture"
+            "KitchenCabinet1Texture",
+            rgba(44, 30, 22)
         );
         changePosition(
             KitchenCabinet1,
@@ -212,7 +225,8 @@ public class Projecto1 : MonoBehaviour
         var (UpperCabinet, UpperCabinetHalf) = loadObject(
             "muebles/Kitchen/Cabinets/90DegreesUpperCabinet/90DegreesUpperCabinet",
             "UpperCabinet",
-            "90degreesUpperCabinetTexture"
+            "90degreesUpperCabinetTexture",
+            rgba(67, 46, 34)
         );
         changePosition(
             UpperCabinet,
@@ -224,7 +238,8 @@ public class Projecto1 : MonoBehaviour
         var (Fridge, FridgeHalf) = loadObject(
             "muebles/Kitchen/Fridge/Fridge",
             "Fridge",
-            "FridgeTexture"
+            "FridgeTexture",
+            rgba(122, 149, 182)
         );
         changePosition(
             Fridge,
@@ -233,13 +248,17 @@ public class Projecto1 : MonoBehaviour
             new Vector3(1, 1, 1)
         ); 
     }
-    
+    private Color rgba(float r, float g, float b, float a = 255)
+    {
+        return new Color(r / 255f, g / 255f, b / 255f, 1f);
+    }
     private void createChairsAndTables()
     {
         var (table, tableHalf) = loadObject(
             "muebles/tables/table/table",
             "table",
-            "tableTexture"
+            "tableTexture",
+            rgba(30, 20, 15)  
         );
         changePosition(
             table,
@@ -251,7 +270,8 @@ public class Projecto1 : MonoBehaviour
         var (chair1, chair1Half) = loadObject(
             "muebles/chairs/chair1/chair1",
             "chair1",
-            "chair1Texture"
+            "chair1Texture",
+            rgba(44, 30, 22)
         );
         changePosition(
             chair1,
@@ -263,7 +283,8 @@ public class Projecto1 : MonoBehaviour
         var (chair2, chair2Half) = loadObject(
             "muebles/chairs/chair1/chair1",
             "chair2",
-            "chair1Texture"
+            "chair1Texture",
+            rgba(44, 30, 22)
         );
         changePosition(
             chair2,
@@ -912,7 +933,7 @@ public class Projecto1 : MonoBehaviour
         myCamera.GetComponent<Camera>().nearClipPlane = 0.01f;
     }
 
-    private (GameObject obj, Vector3 halfExtents) loadObject(String path, String name, String texture)
+    private (GameObject obj, Vector3 halfExtents) loadObject(String path, String name, String texture, Color color)
     {
         FileReader fileReader = new FileReader();
         fileReader.ReadFile(path);
@@ -923,17 +944,28 @@ public class Projecto1 : MonoBehaviour
         obj.AddComponent<MeshRenderer>();
 
         Mesh mesh = obj.GetComponent<MeshFilter>().mesh;
-        mesh.vertices = fileReader.GetVertexes();
+        Vector3[] vertices = fileReader.GetVertexes();
+        mesh.vertices = vertices;
         mesh.triangles = fileReader.GetFaces();
         mesh.uv = fileReader.GetUVs();
 
-        // Cargar la textura desde Resources
-        Texture2D toiletTexture = Resources.Load<Texture2D>(texture);
-        Debug.Log(toiletTexture != null ? "Textura OK" : "Textura no encontrada");
+        Color[] colors = new Color[vertices.Length];
+        for (int i = 0; i < colors.Length; i++)
+        {
+            colors[i] = color;
+        }
+        mesh.colors = colors;
 
-        Material mat = new Material(Shader.Find("SimpleShaderTexture")); // ← shader con textura
-        mat.mainTexture = toiletTexture;
-        obj.GetComponent<MeshRenderer>().material = mat;
+        obj.GetComponent<MeshRenderer>().material = new Material(Shader.Find("SimpleShader"));
+
+        // Cargar la textura desde Resources
+        // Texture2D toiletTexture = Resources.Load<Texture2D>(texture);
+        // Debug.Log(toiletTexture != null ? "Textura OK" : "Textura no encontrada");
+
+        // Material mat = new Material(Shader.Find("SimpleShaderTexture")); // ← shader con textura
+        // mat.mainTexture = toiletTexture;
+        // obj.GetComponent<MeshRenderer>().material = mat;
+
 
         Vector3 half = fileReader.GetHalfExtents(); 
         
