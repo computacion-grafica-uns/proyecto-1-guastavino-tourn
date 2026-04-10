@@ -1,16 +1,19 @@
 ﻿using System;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
+using static UnityEngine.GraphicsBuffer;
 
 public class Projecto1 : MonoBehaviour
 {
-    private GameObject myCamera;
     private int width = 10;
     private int height = 3;
     private int depth = 10;
     private float wallThickness = 0.15f;
     private float bathroomWidth = 4;
     private float bathroomDepth = 4.5f;
-
+    private Vector3 pos = new Vector3(-20, 0, 20);
+    private Vector3 target = new Vector3(0, 0, 0);
+    private Vector3 up = new Vector3(0, 1, 0);
     void Start()
     {
         createFloor();
@@ -18,7 +21,18 @@ public class Projecto1 : MonoBehaviour
         createBathroom();
         createCeiling();
         createFurniture();
-        createCamera();
+        //createCamera();
+        float fov = 100;
+        float aspectRatio = 16 / (float)9;
+        float nearClipPlane = 0.1f;
+        float farClipPlane = 1000;
+        Matrix4x4 proj = CalculatePerspectiveProjectMatrix(fov, aspectRatio, nearClipPlane, farClipPlane);
+
+        foreach (Renderer r in FindObjectsByType<Renderer>(FindObjectsSortMode.None))
+        {
+            if (r.material.HasProperty("_ProjectionMatrix"))
+                r.material.SetMatrix("_ProjectionMatrix", GL.GetGPUProjectionMatrix(proj, true));
+        }
     }
 
     private void createFurniture()
@@ -361,6 +375,7 @@ public class Projecto1 : MonoBehaviour
         frontWall.AddComponent<MeshFilter>();
         frontWall.GetComponent<MeshFilter>().mesh = new Mesh();
         frontWall.AddComponent<MeshRenderer>();
+        frontWall.AddComponent<CameraManager>();
         frontVertices = new Vector3[]
         {
             //Afuera
@@ -923,16 +938,6 @@ public class Projecto1 : MonoBehaviour
         return bordersBathroomDoor;
     }
 
-    private void createCamera(){
-        myCamera = new GameObject("Camera");
-        myCamera.AddComponent<Camera>();
-        myCamera.transform.position = new Vector3(-20,4,-10);
-        myCamera.transform.rotation = Quaternion.Euler(0,60,0);
-        myCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
-        myCamera.GetComponent<Camera>().backgroundColor = Color.black;
-        myCamera.GetComponent<Camera>().nearClipPlane = 0.01f;
-    }
-
     private (GameObject obj, Vector3 halfExtents) loadObject(String path, String name, String texture, Color color)
     {
         FileReader fileReader = new FileReader();
@@ -976,7 +981,6 @@ public class Projecto1 : MonoBehaviour
     private void changePosition(GameObject obj,Vector3 newPosition, Vector3 newRotation, Vector3 newScale){
         Matrix4x4 modelMatrix = CreateModelMatrix(newPosition, newRotation, newScale);
         obj.GetComponent<Renderer>().material.SetMatrix("_ModelMatrix", modelMatrix);
-
     }
 
     private void UpdateMesh(GameObject gO,Vector3[] v,int[] f, Color[] c){
@@ -1034,5 +1038,22 @@ public class Projecto1 : MonoBehaviour
         finalMatrix *= scaleMatrix;
 
         return finalMatrix;
+    }
+
+    private Matrix4x4 CalculatePerspectiveProjectMatrix(float fov, float aspect, float n, float f)
+    {
+        Matrix4x4 perspectiveProjectMatrix = new Matrix4x4(
+            new Vector4(1 / (aspect * Mathf.Tan(fov / 2)), 0f, 0f, 0f),
+            new Vector4(0f, 1 / Mathf.Tan(fov / 2), 0f, 0f),
+            new Vector4(0f, 0f, (f + n) / (n - f), (2 * f * n) / (n - f)),
+            new Vector4(0f, 0f, -1f, 0f)
+        );
+
+        return perspectiveProjectMatrix.transpose;
+    }
+
+    private void Update()
+    {
+        
     }
 }
