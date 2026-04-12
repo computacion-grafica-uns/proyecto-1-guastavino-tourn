@@ -1,0 +1,24 @@
+# bathroomSideWall.obj
+# bathroomWidth=4, bathroomDepth=4.5, wallThickness=0.15, height=3
+o BathroomSideWall
+
+# Interior
+v 0.15 0.0 4.35
+v 0.15 3.0 4.35
+v 3.85 0.0 4.35
+v 3.85 0.0 4.35
+v 0.15 3.0 4.35
+v 3.85 3.0 4.35
+
+# Exterior
+v 4.0  0.0 4.5
+v 4.0  3.0 4.5
+v 0.15 0.0 4.5
+v 0.15 0.0 4.5
+v 4.0  3.0 4.5
+v 0.15 3.0 4.5
+
+f 1 2 3
+f 4 5 6
+f 7 8 9
+f 10 11 12

@@ -1,18 +1,10 @@
-# Ceiling.obj
-# width=10, height=3, depth=10, wallThickness=0.15
-# bathroomWidth=4, bathroomDepth=4.5
-# Z negado: coordenadas Unity (Z-forward) -> OBJ (Z-back)
-
-# ============================================================
+# ceiling.obj
 o Ceiling
-# ============================================================
 v  0.0  3.0   0.0
-v  0.0  3.0 -10.0
+v  0.0  3.0  10.0
 v 10.0  3.0   0.0
-
-v  0.0  3.0 -10.0
-v 10.0  3.0 -10.0
+v  0.0  3.0  10.0
+v 10.0  3.0  10.0
 v 10.0  3.0   0.0
-
-f 37 38 39
-f 40 41 42
+f 1 2 3
+f 4 5 6

@@ -1,7 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
-using static UnityEngine.GraphicsBuffer;
 
 public class Projecto1 : MonoBehaviour
 {
@@ -11,9 +9,6 @@ public class Projecto1 : MonoBehaviour
     private float wallThickness = 0.15f;
     private float bathroomWidth = 4;
     private float bathroomDepth = 4.5f;
-    private Vector3 pos = new Vector3(-20, 0, 20);
-    private Vector3 target = new Vector3(0, 0, 0);
-    private Vector3 up = new Vector3(0, 1, 0);
     void Start()
     {
         createFloor();
@@ -21,17 +16,19 @@ public class Projecto1 : MonoBehaviour
         createBathroom();
         createCeiling();
         createFurniture();
-        //createCamera();
+
+        GameObject cameraGO = new GameObject("CameraController");
+        CameraManager cam = cameraGO.AddComponent<CameraManager>();
+
         float fov = 100;
         float aspectRatio = 16 / (float)9;
         float nearClipPlane = 0.1f;
         float farClipPlane = 1000;
         Matrix4x4 proj = CalculatePerspectiveProjectMatrix(fov, aspectRatio, nearClipPlane, farClipPlane);
-
         foreach (Renderer r in FindObjectsByType<Renderer>(FindObjectsSortMode.None))
         {
-            if (r.material.HasProperty("_ProjectionMatrix"))
-                r.material.SetMatrix("_ProjectionMatrix", GL.GetGPUProjectionMatrix(proj, true));
+            if (r.sharedMaterial != null && r.sharedMaterial.HasProperty("_ProjectionMatrix"))
+                r.sharedMaterial.SetMatrix("_ProjectionMatrix", GL.GetGPUProjectionMatrix(proj, true));
         }
     }
 
@@ -360,386 +357,92 @@ public class Projecto1 : MonoBehaviour
 
     private void createWalls()
     {
-        createFrontWall();
-        createLeftWall();
-        createBackWall();
-        createRightWall();
+        Color wallColor = rgba(243, 243, 243);
+        createFrontWall(wallColor);
+        createLeftWall(wallColor);
+        createBackWall(wallColor);
+        createRightWall(wallColor);
     }
 
-    private void createFrontWall()
+    private void createFrontWall(Color wallColor)
     {
-        Vector3[] frontVertices;
-        int[] frontFaces;
-        GameObject frontWall;
-        frontWall = new GameObject("FrontWall");
-        frontWall.AddComponent<MeshFilter>();
-        frontWall.GetComponent<MeshFilter>().mesh = new Mesh();
-        frontWall.AddComponent<MeshRenderer>();
-        frontWall.AddComponent<CameraManager>();
-        frontVertices = new Vector3[]
-        {
-            //Afuera
-
-            // Triangle 1
-            new Vector3(0,0,0),
-            new Vector3(0,height,0),
-            new Vector3(4.6f,height,0),
-            
-            // Triangle 2
-            new Vector3(0,0,0),
-            new Vector3(4.6f,height,0),
-            new Vector3(4.6f,0,0),
-
-            // Triangle 3
-            new Vector3(4.6f,2,0),
-            new Vector3(4.6f,height,0),
-            new Vector3(5.4f,height,0),
-
-            // Triangle 4
-            new Vector3(5.4f,2,0),
-            new Vector3(4.6f,2,0),
-            new Vector3(5.4f,height,0),
-            
-            // Triangle 5
-            new Vector3(5.4f,height,0),
-            new Vector3(5.9f,height,0),
-            new Vector3(5.4f,0,0),
-
-            // Triangle 6
-            new Vector3(5.9f,0,0),
-            new Vector3(5.4f,0,0),
-            new Vector3(5.9f,height,0),
-
-            // Triangle 7
-            new Vector3(5.9f,height,0),
-            new Vector3(7.4f,height,0),
-            new Vector3(5.9f,2,0),
-
-            // Triangle 8
-            new Vector3(5.9f,2,0),
-            new Vector3(7.4f,height,0),
-            new Vector3(7.4f,2,0),
-
-            // Triangle 9
-            new Vector3(5.9f,0,0),
-            new Vector3(5.9f,1,0),
-            new Vector3(7.4f,1,0),
-
-            // Triangle 10
-            new Vector3(5.9f,0,0),
-            new Vector3(7.4f,1,0),
-            new Vector3(7.4f,0,0),
-
-            // Triangle 11
-            new Vector3(7.4f,0,0),
-            new Vector3(7.4f,height,0),
-            new Vector3(width,height,0),
-
-            // Triangle 12
-            new Vector3(width,height,0),
-            new Vector3(width,0,0),
-            new Vector3(7.4f,0,0),
-
-            //Adentro
-
-            // Triangle 
-            new Vector3(width-wallThickness,0,wallThickness),
-            new Vector3(width-wallThickness,height,wallThickness),
-            new Vector3(7.4f,0,wallThickness),
-
-            // Triangle 
-            new Vector3(7.4f,0,wallThickness),
-            new Vector3(width - wallThickness,height,wallThickness),
-            new Vector3(7.4f,height,wallThickness),
-
-            // Triangle 
-            new Vector3(7.4f,0,wallThickness),
-            new Vector3(7.4f,1,wallThickness),
-            new Vector3(5.9f,0,wallThickness),
-
-            // Triangle 
-            new Vector3(5.9f,0,wallThickness),
-            new Vector3(7.4f,1,wallThickness),
-            new Vector3(5.9f,1,wallThickness),
-
-            // Triangle 
-            new Vector3(7.4f,2,wallThickness),
-            new Vector3(7.4f,height,wallThickness),
-            new Vector3(5.9f,2,wallThickness),
-
-            // Triangle 
-            new Vector3(5.9f,2,wallThickness),
-            new Vector3(7.4f,height,wallThickness),
-            new Vector3(5.9f,height,wallThickness),
-
-            // Triangle 
-            new Vector3(5.4f,0,wallThickness),
-            new Vector3(5.9f,0,wallThickness),
-            new Vector3(5.9f,height,wallThickness),
-
-            // Triangle 
-            new Vector3(5.4f,0,wallThickness),
-            new Vector3(5.9f,height,wallThickness),
-            new Vector3(5.4f,height,wallThickness),
-
-            // Triangle 
-            new Vector3(4.6f,2,wallThickness),
-            new Vector3(5.4f,2,wallThickness),
-            new Vector3(5.4f,height,wallThickness),
-
-            // Triangle 
-            new Vector3(5.4f,height,wallThickness),
-            new Vector3(4.6f,height,wallThickness),
-            new Vector3(4.6f,2,wallThickness),
-
-            // Triangle 
-            new Vector3(0 + wallThickness,0,wallThickness),
-            new Vector3(4.6f,0,wallThickness),
-            new Vector3(4.6f,height,wallThickness),
-
-            // Triangle 
-            new Vector3(4.6f,height,wallThickness),
-            new Vector3(0 + wallThickness,height,wallThickness),
-            new Vector3(0 + wallThickness,0,wallThickness),
-
-            // Bordes ventana
-
-            new Vector3(5.9f,1,0),
-            new Vector3(5.9f,1,wallThickness),
-            new Vector3(7.4f,1,0),
-
-            new Vector3(5.9f,1,wallThickness),
-            new Vector3(7.4f,1,wallThickness),
-            new Vector3(7.4f,1,0),
-
-            new Vector3(5.9f,1,0),
-            new Vector3(5.9f,2,0),
-            new Vector3(5.9f,2,wallThickness),
-
-            new Vector3(5.9f,1,0),
-            new Vector3(5.9f,2,wallThickness),
-            new Vector3(5.9f,1,wallThickness),
-
-            new Vector3(5.9f,2,0),
-            new Vector3(7.4f,2,wallThickness),
-            new Vector3(5.9f,2,wallThickness),
-
-            new Vector3(5.9f,2,0),
-            new Vector3(7.4f,2,0),
-            new Vector3(7.4f,2,wallThickness),
-
-            new Vector3(7.4f,1,0),
-            new Vector3(7.4f,2,wallThickness),
-            new Vector3(7.4f,2,0),
-
-            new Vector3(7.4f,1,0),
-            new Vector3(7.4f,1,wallThickness),
-            new Vector3(7.4f,2,wallThickness),
-
-            //Bordes puerta
-
-            new Vector3(4.6f,0,0),
-            new Vector3(4.6f,2,0),
-            new Vector3(4.6f,0,wallThickness),
-
-            new Vector3(4.6f,0,wallThickness),
-            new Vector3(4.6f,2,0),
-            new Vector3(4.6f,2,wallThickness),
-
-            new Vector3(4.6f,2,wallThickness),
-            new Vector3(4.6f,2,0),
-            new Vector3(5.4f,2,0),
-
-            new Vector3(5.4f,2,0),
-            new Vector3(5.4f,2,wallThickness),
-            new Vector3(4.6f,2,wallThickness),
-
-            new Vector3(5.4f,0,0),
-            new Vector3(5.4f,0,wallThickness),
-            new Vector3(5.4f,2,wallThickness),
-
-            new Vector3(5.4f,2,wallThickness),
-            new Vector3(5.4f,2,0),
-            new Vector3(5.4f,0,0),
-        };
-
-        frontFaces = new int[frontVertices.Length];
-        for (int i = 0; i < frontFaces.Length; i++)
-            frontFaces[i] = i;
-
-        Color[] frontColors = new Color[frontVertices.Length];
-        for (int i = 0; i < frontColors.Length; i++)
-        {
-            frontColors[i] = frontColors[i] = new Color(243f / 255f, 243f / 255f, 243f / 255f);
-        }
-
-        UpdateMesh(frontWall, frontVertices, frontFaces, frontColors);
+        var (frontWall, frontWallHalf) = loadObject(
+            "walls/house/frontWall",
+            "frontWall",
+            "frontWallTexture",
+            wallColor
+        );
+        changePosition(
+            frontWall,
+            new Vector3(frontWallHalf.x, frontWallHalf.y, frontWallHalf.z),
+            new Vector3(0, 0, 0),
+            new Vector3(1, 1, 1)
+        );
     }
 
-    private void createBackWall()
+    private void createBackWall(Color wallColor)
     {
-        Vector3[] backWallVertices;
-        int[] backWallFaces;
-        GameObject backWall;
-        backWall = new GameObject("BackWall");
-        backWall.AddComponent<MeshFilter>();
-        backWall.GetComponent<MeshFilter>().mesh = new Mesh();
-        backWall.AddComponent<MeshRenderer>();
-        backWallVertices = new Vector3[]
-        {
-            // Exterior
-            new Vector3(width,0,depth),
-            new Vector3(width,height,depth),
-            new Vector3(0,0,depth),
-
-            new Vector3(0,0,depth),
-            new Vector3(width,height,depth),
-            new Vector3(0,height,depth),
-
-            // Interior
-            new Vector3(wallThickness,0,depth-wallThickness),
-            new Vector3(wallThickness,height,depth-wallThickness),
-            new Vector3(width - wallThickness,0,depth-wallThickness),
-
-            new Vector3(width - wallThickness,0,depth-wallThickness),
-            new Vector3(wallThickness,height,depth-wallThickness),
-            new Vector3(width - wallThickness,height,depth-wallThickness),
-        };
-
-        backWallFaces = new int[backWallVertices.Length];
-        for (int i = 0; i < backWallFaces.Length; i++)
-            backWallFaces[i] = i;
-
-        Color[] backWallColors = new Color[backWallVertices.Length];
-        for (int i = 0; i < backWallColors.Length; i++)
-        {
-            backWallColors[i] = backWallColors[i] = new Color(243f / 255f, 243f / 255f, 243f / 255f);
-        }
-
-        UpdateMesh(backWall, backWallVertices, backWallFaces, backWallColors);
+        var (backWall, backWallHalf) = loadObject(
+            "walls/house/backWall",
+            "backWall",
+            "backWallTexture",
+            wallColor
+        );
+        changePosition(
+            backWall,
+            new Vector3(backWallHalf.x, backWallHalf.y, backWallHalf.z + depth - wallThickness),
+            new Vector3(0, 0, 0),
+            new Vector3(1, 1, 1)
+        );
     }
 
-    private void createLeftWall()
+    private void createLeftWall(Color wallColor)
     {
-        Vector3[] leftWallVertices;
-        int[] leftWallFaces;
-        GameObject leftWall;
-        leftWall = new GameObject("LeftWall");
-        leftWall.AddComponent<MeshFilter>();
-        leftWall.GetComponent<MeshFilter>().mesh = new Mesh();
-        leftWall.AddComponent<MeshRenderer>();
-        leftWallVertices = new Vector3[]
-        {
-            // Exterior
-            new Vector3(0,0,depth),
-            new Vector3(0,height,depth),
-            new Vector3(0,0,0),
-
-            new Vector3(0,0,0),
-            new Vector3(0,height,depth),
-            new Vector3(0,height,0),
-
-            // Interior
-            new Vector3(wallThickness,0,0),
-            new Vector3(wallThickness,height,0),
-            new Vector3(wallThickness,0,depth-wallThickness),
-
-            new Vector3(wallThickness,0,depth-wallThickness),
-            new Vector3(wallThickness,height,0),
-            new Vector3(wallThickness,height,depth-wallThickness),
-        };
-
-        leftWallFaces = new int[leftWallVertices.Length];
-        for (int i = 0; i < leftWallFaces.Length; i++)
-            leftWallFaces[i] = i;
-
-        Color[] leftWallColors = new Color[leftWallVertices.Length];
-        for (int i = 0; i < leftWallColors.Length; i++)
-        {
-            leftWallColors[i] = leftWallColors[i] = new Color(243f / 255f, 243f / 255f, 243f / 255f);
-        }
-
-        UpdateMesh(leftWall, leftWallVertices, leftWallFaces, leftWallColors);
+        var (leftWall, leftWallHalf) = loadObject(
+            "walls/house/leftWall",
+            "leftWall",
+            "leftWallTexture",
+            wallColor
+        );
+        changePosition(
+            leftWall,
+            new Vector3(leftWallHalf.x, leftWallHalf.y, leftWallHalf.z),
+            new Vector3(0, 0, 0),
+            new Vector3(1, 1, 1)
+        );
     }
 
-    private void createRightWall()
+    private void createRightWall(Color wallColor)
     {
-        Vector3[] rightWallVertices;
-        int[] rightWallFaces;
-        GameObject rightWall;
-        rightWall = new GameObject("RightWall");
-        rightWall.AddComponent<MeshFilter>();
-        rightWall.GetComponent<MeshFilter>().mesh = new Mesh();
-        rightWall.AddComponent<MeshRenderer>();
-        rightWallVertices = new Vector3[]
-        {
-            // Exterior
-            new Vector3(width,0,0),
-            new Vector3(width,height,0),
-            new Vector3(width,0,depth),
-
-            new Vector3(width,0,depth),
-            new Vector3(width,height,0),
-            new Vector3(width,height,depth),
-
-            // Interior
-            new Vector3(width-wallThickness,0,depth-wallThickness),
-            new Vector3(width-wallThickness,height,depth-wallThickness),
-            new Vector3(width-wallThickness,0,wallThickness),
-
-            new Vector3(width-wallThickness,0,wallThickness),
-            new Vector3(width-wallThickness,height,depth-wallThickness),
-            new Vector3(width-wallThickness,height,wallThickness),
-        };
-
-        rightWallFaces = new int[rightWallVertices.Length];
-        for (int i = 0; i < rightWallFaces.Length; i++)
-            rightWallFaces[i] = i;
-
-        Color[] rightWallColors = new Color[rightWallVertices.Length];
-        for (int i = 0; i < rightWallColors.Length; i++)
-        {
-            rightWallColors[i] = rightWallColors[i] = new Color(243f / 255f, 243f / 255f, 243f / 255f);
-        }
-
-        UpdateMesh(rightWall, rightWallVertices, rightWallFaces, rightWallColors);
+        var (rightWall, rightWallHalf) = loadObject(
+            "walls/house/rightWall",
+            "rightWall",
+            "rightWallTexture",
+            wallColor
+        );
+        changePosition(
+            rightWall,
+            new Vector3(rightWallHalf.x + width - wallThickness, rightWallHalf.y, rightWallHalf.z),
+            new Vector3(0, 0, 0),
+            new Vector3(1, 1, 1)
+        );
     }
 
     private void createCeiling()
     {
-        Vector3[] ceilingVertices;
-        int[] ceilingFaces;
-        GameObject ceiling;
-        ceiling = new GameObject("Ceiling");
-        ceiling.AddComponent<MeshFilter>();
-        ceiling.GetComponent<MeshFilter>().mesh = new Mesh();
-        ceiling.AddComponent<MeshRenderer>();
-        ceilingVertices = new Vector3[]
-        {
-            // Triangle 1
-            new Vector3(0,height,0),
-            new Vector3(0,height,depth),
-            new Vector3(width,height,0),
-            
-
-            // Triangle 2
-            new Vector3(0,height,depth),
-            new Vector3(width,height,depth),
-            new Vector3(width,height,0),
-
-        };
-
-        ceilingFaces = new int[] {
-            0,1,2,
-            3,4,5,
-        };
-
-        Color[] ceilingColors = new Color[ceilingVertices.Length];
-        for (int i = 0; i < ceilingColors.Length; i++)
-        {
-            ceilingColors[i] = ceilingColors[i] = new Color(243f / 255f, 243f / 255f, 243f / 255f);
-        }
-        UpdateMesh(ceiling, ceilingVertices, ceilingFaces, ceilingColors);
+        Color ceilingColor = rgba(243, 243, 243);
+        var (ceiling, ceilingHalf) = loadObject(
+           "walls/house/ceiling",
+           "ceiling",
+           "ceilingTexture",
+           ceilingColor
+       );
+        changePosition(
+            ceiling,
+            new Vector3(ceilingHalf.x, ceilingHalf.y + height, ceilingHalf.z),
+            new Vector3(0, 0, 0),
+            new Vector3(1, 1, 1)
+        );
     }
 
     private void createBathroom()
@@ -791,151 +494,43 @@ public class Projecto1 : MonoBehaviour
 
     private void createBathroomWalls()
     {
-        Vector3[] bathroomWallsVertices;
-        int[] bathroomWallsFaces;
-        GameObject bathroomWalls;
-        bathroomWalls = new GameObject("BathroomWalls");
-        bathroomWalls.AddComponent<MeshFilter>();
-        bathroomWalls.GetComponent<MeshFilter>().mesh = new Mesh();
-        bathroomWalls.AddComponent<MeshRenderer>();
+        Color wallColor = rgba(243, 243, 243);
 
-        Vector3[] frontWallVertices = createFrontBathroomWall();
-        Vector3[] sideWallVertices = createSideBathroomWall();
-        Vector3[] doorBordersVertices = createBordersBathroomDoor();
-        bathroomWallsVertices = new Vector3[frontWallVertices.Length + sideWallVertices.Length + doorBordersVertices.Length];
-        frontWallVertices.CopyTo(bathroomWallsVertices, 0);
-        sideWallVertices.CopyTo(bathroomWallsVertices, frontWallVertices.Length);
-        doorBordersVertices.CopyTo(bathroomWallsVertices, frontWallVertices.Length + sideWallVertices.Length);
+        createBathroomFrontWall(wallColor);
 
-        bathroomWallsFaces = new int[bathroomWallsVertices.Length];
-        for (int i = 0; i < bathroomWallsFaces.Length; i++)
-            bathroomWallsFaces[i] = i;
-
-        Color[] bathroomWallsColors = new Color[0];
-
-        UpdateMesh(bathroomWalls, bathroomWallsVertices, bathroomWallsFaces, bathroomWallsColors);
+        createBathroomSideWall(wallColor);
     }
 
-    private Vector3[] createFrontBathroomWall()
+    private void createBathroomFrontWall(Color wallColor)
     {
-        Vector3[] frontBathroomWallVertices = new Vector3[]
-        {
-            // Interior
-
-            new Vector3(bathroomWidth-wallThickness,0,bathroomDepth-wallThickness),
-            new Vector3(bathroomWidth-wallThickness,height,bathroomDepth-wallThickness),
-            new Vector3(bathroomWidth-wallThickness,0,bathroomDepth-wallThickness-0.2f),
-
-            new Vector3(bathroomWidth-wallThickness,0,bathroomDepth-wallThickness-0.2f),
-            new Vector3(bathroomWidth-wallThickness,height,bathroomDepth-wallThickness),
-            new Vector3(bathroomWidth-wallThickness,height,bathroomDepth-wallThickness-0.2f),
-
-            new Vector3(bathroomWidth-wallThickness,2,bathroomDepth-wallThickness-0.2f),
-            new Vector3(bathroomWidth-wallThickness,height,bathroomDepth-wallThickness-0.2f),
-            new Vector3(bathroomWidth-wallThickness,2,bathroomDepth-wallThickness-1),
-
-            new Vector3(bathroomWidth-wallThickness,2,bathroomDepth-wallThickness-1),
-            new Vector3(bathroomWidth-wallThickness,height,bathroomDepth-wallThickness-0.2f),
-            new Vector3(bathroomWidth-wallThickness,height,bathroomDepth-wallThickness-1),
-
-            new Vector3(bathroomWidth-wallThickness,0,bathroomDepth-wallThickness-1f),
-            new Vector3(bathroomWidth-wallThickness,height,bathroomDepth-wallThickness-1f),
-            new Vector3(bathroomWidth-wallThickness,0,wallThickness),
-
-            new Vector3(bathroomWidth-wallThickness,0,wallThickness),
-            new Vector3(bathroomWidth-wallThickness,height,bathroomDepth-wallThickness-1f),
-            new Vector3(bathroomWidth-wallThickness,height,wallThickness),
-
-            // Exterior
-            
-            new Vector3(bathroomWidth,0,wallThickness),
-            new Vector3(bathroomWidth,height,wallThickness),
-            new Vector3(bathroomWidth,0,bathroomDepth - wallThickness - 1f),
-
-            new Vector3(bathroomWidth,0,bathroomDepth - wallThickness - 1f),
-            new Vector3(bathroomWidth,height,wallThickness),
-            new Vector3(bathroomWidth,height,bathroomDepth - wallThickness - 1f),
-
-            new Vector3(bathroomWidth,2,bathroomDepth - wallThickness - 1f),
-            new Vector3(bathroomWidth,height,bathroomDepth - wallThickness - 1f),
-            new Vector3(bathroomWidth,2,bathroomDepth - wallThickness - 0.2f),
-
-            new Vector3(bathroomWidth,2,bathroomDepth - wallThickness - 0.2f),
-            new Vector3(bathroomWidth,height,bathroomDepth - wallThickness - 1f),
-            new Vector3(bathroomWidth,height,bathroomDepth - wallThickness - 0.2f),
-
-            new Vector3(bathroomWidth,0,bathroomDepth - wallThickness - 0.2f),
-            new Vector3(bathroomWidth,height,bathroomDepth - wallThickness - 0.2f),
-            new Vector3(bathroomWidth,0,bathroomDepth),
-
-            new Vector3(bathroomWidth,0,bathroomDepth),
-            new Vector3(bathroomWidth,height,bathroomDepth - wallThickness - 0.2f),
-            new Vector3(bathroomWidth,height,bathroomDepth),
-        };
-
-        return frontBathroomWallVertices;
+        var (bathroomFrontWall, bathroomFrontWallHalf) = loadObject(
+            "walls/bathroom/bathroomFrontWall",
+            "bathroomFrontWall",
+            "bathroomFrontWallTexture",
+            wallColor
+        );
+        changePosition(
+            bathroomFrontWall,
+            new Vector3(bathroomFrontWallHalf.x + 3.85f, bathroomFrontWallHalf.y, bathroomFrontWallHalf.z + wallThickness),
+            new Vector3(0, 0, 0),
+            new Vector3(1, 1, 1)
+        );
     }
 
-    private Vector3[] createSideBathroomWall()
+    private void createBathroomSideWall(Color wallColor)
     {
-        Vector3[] sideBathroomWallVertices = new Vector3[]
-        {
-            // Interior
-            new Vector3(wallThickness,0,bathroomDepth-wallThickness),
-            new Vector3(wallThickness,height,bathroomDepth-wallThickness),
-            new Vector3(bathroomWidth - wallThickness,0,bathroomDepth-wallThickness),
-
-            new Vector3(bathroomWidth - wallThickness,0,bathroomDepth-wallThickness),
-            new Vector3(wallThickness,height,bathroomDepth-wallThickness),
-            new Vector3(bathroomWidth - wallThickness,height,bathroomDepth-wallThickness),
-
-            //Exterior
-            new Vector3(bathroomWidth,0,bathroomDepth),
-            new Vector3(bathroomWidth,height,bathroomDepth),
-            new Vector3(wallThickness,0,bathroomDepth),
-
-            new Vector3(wallThickness,0,bathroomDepth),
-            new Vector3(bathroomWidth,height,bathroomDepth),
-            new Vector3(wallThickness,height,bathroomDepth),
-        };
-
-        return sideBathroomWallVertices;
-    }
-
-    private Vector3[] createBordersBathroomDoor()
-    {
-        Vector3[] bordersBathroomDoor = new Vector3[]
-        {
-            // Puerta
-            new Vector3(bathroomWidth,0,bathroomDepth - wallThickness - 1f),
-            new Vector3(bathroomWidth,2,bathroomDepth - wallThickness - 1f),
-            new Vector3(bathroomWidth - wallThickness,0,bathroomDepth - wallThickness - 1f),
-
-            new Vector3(bathroomWidth - wallThickness,0,bathroomDepth - wallThickness - 1f),
-            new Vector3(bathroomWidth,2,bathroomDepth - wallThickness - 1f),
-            new Vector3(bathroomWidth - wallThickness,2,bathroomDepth - wallThickness - 1f),
-
-
-            new Vector3(bathroomWidth,2,bathroomDepth - wallThickness - 1f),
-            new Vector3(bathroomWidth,2,bathroomDepth - wallThickness - 0.2f),
-            new Vector3(bathroomWidth - wallThickness,2,bathroomDepth - wallThickness - 1f),
-
-            new Vector3(bathroomWidth - wallThickness,2,bathroomDepth - wallThickness - 1f),
-            new Vector3(bathroomWidth,2,bathroomDepth - wallThickness - 0.2f),
-            new Vector3(bathroomWidth - wallThickness,2,bathroomDepth - wallThickness - 0.2f),
-
-            new Vector3(bathroomWidth - wallThickness,0,bathroomDepth - wallThickness - 0.2f),
-            new Vector3(bathroomWidth - wallThickness,2,bathroomDepth - wallThickness - 0.2f),
-            new Vector3(bathroomWidth,0,bathroomDepth - wallThickness - 0.2f),
-
-            new Vector3(bathroomWidth,0,bathroomDepth - wallThickness - 0.2f),
-            new Vector3(bathroomWidth - wallThickness,2,bathroomDepth - wallThickness - 0.2f),
-            new Vector3(bathroomWidth,2,bathroomDepth - wallThickness - 0.2f),
-
-            // Ventana
-        };
-
-        return bordersBathroomDoor;
+        var (bathroomSideWall, bathroomSideWallHalf) = loadObject(
+            "walls/bathroom/bathroomSideWall",
+            "bathroomSideWall",
+            "bathroomSideWallTexture",
+            wallColor
+        );
+        changePosition(
+            bathroomSideWall,
+            new Vector3(bathroomSideWallHalf.x + wallThickness, bathroomSideWallHalf.y, bathroomSideWallHalf.z + 4.35f),
+            new Vector3(0, 0, 0),
+            new Vector3(1, 1, 1)
+        );
     }
 
     private (GameObject obj, Vector3 halfExtents) loadObject(String path, String name, String texture, Color color)
@@ -952,7 +547,6 @@ public class Projecto1 : MonoBehaviour
         Vector3[] vertices = fileReader.GetVertexes();
         mesh.vertices = vertices;
         mesh.triangles = fileReader.GetFaces();
-        mesh.uv = fileReader.GetUVs();
 
         Color[] colors = new Color[vertices.Length];
         for (int i = 0; i < colors.Length; i++)
@@ -962,15 +556,6 @@ public class Projecto1 : MonoBehaviour
         mesh.colors = colors;
 
         obj.GetComponent<MeshRenderer>().material = new Material(Shader.Find("SimpleShader"));
-
-        // Cargar la textura desde Resources
-        // Texture2D toiletTexture = Resources.Load<Texture2D>(texture);
-        // Debug.Log(toiletTexture != null ? "Textura OK" : "Textura no encontrada");
-
-        // Material mat = new Material(Shader.Find("SimpleShaderTexture")); // ← shader con textura
-        // mat.mainTexture = toiletTexture;
-        // obj.GetComponent<MeshRenderer>().material = mat;
-
 
         Vector3 half = fileReader.GetHalfExtents(); 
         

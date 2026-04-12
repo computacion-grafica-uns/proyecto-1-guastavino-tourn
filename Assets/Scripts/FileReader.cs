@@ -26,7 +26,7 @@ public class FileReader
         reader.Close();
 
         string folder = Path.GetDirectoryName(path).Replace("\\", "/") + "/";
-        Debug.Log("Folder: " + folder);
+        //Debug.Log("Folder: " + folder);
         ReadEachLine(fileData, folder);
     }
 
@@ -81,14 +81,14 @@ public class FileReader
             }
             else if (line.StartsWith("vt "))
             {
-                string[] parts = line.Split(' ');
+                string[] parts = line.Split(' ', System.StringSplitOptions.RemoveEmptyEntries);
                 float u = float.Parse(parts[1], CultureInfo.InvariantCulture);
                 float v = float.Parse(parts[2], CultureInfo.InvariantCulture);
                 rawUVs.Add(new Vector2(u, v));
             }
             else if (line.StartsWith("v "))
             {
-                string[] parts = line.Split(' ');
+                string[] parts = line.Split(' ', System.StringSplitOptions.RemoveEmptyEntries);
                 float x = float.Parse(parts[1], CultureInfo.InvariantCulture);
                 float y = float.Parse(parts[2], CultureInfo.InvariantCulture);
                 float z = float.Parse(parts[3], CultureInfo.InvariantCulture);

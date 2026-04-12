@@ -1,10 +1,12 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
     private GameObject myCamera;
+
     private Vector3 pos = new Vector3(5, 1, -10);
     private Vector3 target = new Vector3(0, 0, 1);
     private Vector3 up = new Vector3(0, 1, 0);
@@ -26,8 +28,6 @@ public class CameraManager : MonoBehaviour
         myCamera.GetComponent<Camera>().backgroundColor = Color.black;
         myCamera.GetComponent<Camera>().nearClipPlane = 0.01f;
         myCamera.GetComponent<Camera>().farClipPlane = 10000f;
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
     }
 
     void Update()
@@ -60,7 +60,7 @@ public class CameraManager : MonoBehaviour
         float pitchRad = orbitPitch * Mathf.Deg2Rad;
         float yawRad = orbitYaw * Mathf.Deg2Rad;
 
-        // Calcular posiciÛn de la c·mara alrededor del orbitTarget
+        // Calcular posici√≥n de la c√°mara alrededor del orbitTarget
         pos = orbitTarget + new Vector3(
             Mathf.Cos(pitchRad) * Mathf.Sin(yawRad),
             Mathf.Sin(pitchRad),
@@ -69,18 +69,22 @@ public class CameraManager : MonoBehaviour
 
         target = orbitTarget;
         ApplyViewMatrix();
-        Matrix4x4 viewMatrix = CreateViewMatrix(pos, target, up);
-        foreach (Renderer r in FindObjectsByType<Renderer>(FindObjectsSortMode.None))
-        {
-            if (r.material.HasProperty("_ViewMatrix"))
-                r.material.SetMatrix("_ViewMatrix", viewMatrix);
-        }
     }
     private void UpdateFirstPerson()
     {
-        yaw += Input.GetAxis("Mouse X") * mouseSensitivity;
-        pitch -= Input.GetAxis("Mouse Y") * mouseSensitivity;
-        //pitch = Mathf.Clamp(pitch, -89f, 89f);
+        float rotateHorizontal = 0f;
+        float rotateVertical = 0f;
+
+        if (Input.GetKey(KeyCode.LeftArrow)) rotateHorizontal = -1f;
+        if (Input.GetKey(KeyCode.RightArrow)) rotateHorizontal = 1f;
+        if (Input.GetKey(KeyCode.UpArrow)) rotateVertical = 1f;
+        if (Input.GetKey(KeyCode.DownArrow)) rotateVertical = -1f;
+
+        float rotationSpeed = 50f;
+
+        yaw += rotateHorizontal * rotationSpeed * Time.deltaTime;
+        pitch += rotateVertical * rotationSpeed * Time.deltaTime;
+        pitch = Mathf.Clamp(pitch, -89f, 89f);
 
         float pitchRad = pitch * Mathf.Deg2Rad;
         float yawRad = yaw * Mathf.Deg2Rad;
@@ -95,25 +99,22 @@ public class CameraManager : MonoBehaviour
         Vector3 move = Vector3.zero;
         Vector3 flatForward = -new Vector3(forward.x, 0f, forward.z).normalized;
 
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) move += flatForward;
-        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) move -= flatForward;
-        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) move += right;
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) move -= right;
-        if (Input.GetKey(KeyCode.Space)) move -= up;
-        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) move += up;
+        Vector3 moveDir = Vector3.zero;
+        if (Input.GetKey(KeyCode.W)) moveDir -= flatForward;
+        if (Input.GetKey(KeyCode.S)) moveDir += flatForward;
+        if (Input.GetKey(KeyCode.A)) moveDir += right;
+        if (Input.GetKey(KeyCode.D)) moveDir -= right;
+        if (Input.GetKey(KeyCode.Space)) moveDir += up;
+        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) moveDir -= up;
 
-        if (move != Vector3.zero)
-            pos -= move.normalized * cameraSpeed * Time.deltaTime;
+        if (moveDir != Vector3.zero)
+        {
+            moveDir.Normalize();
+            pos += moveDir * cameraSpeed * Time.deltaTime;
+        }
 
         target = pos + forward;
         ApplyViewMatrix();
-
-        Matrix4x4 viewMatrix = CreateViewMatrix(pos, target, up);
-        foreach (Renderer r in FindObjectsByType<Renderer>(FindObjectsSortMode.None))
-        {
-            if (r.material.HasProperty("_ViewMatrix"))
-                r.material.SetMatrix("_ViewMatrix", viewMatrix);
-        }
     }
 
     private Matrix4x4 CreateViewMatrix(Vector3 eye, Vector3 target, Vector3 up)

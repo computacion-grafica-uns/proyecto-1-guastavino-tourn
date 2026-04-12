@@ -22,6 +22,8 @@ Shader "SimpleShader"
 			};
 
 			uniform float4x4 _ModelMatrix;
+			uniform float4x4 _ViewMatrix;
+			uniform float4x4 _ProjectionMatrix;
 
 			v2f vert (appdata v)
 			{
