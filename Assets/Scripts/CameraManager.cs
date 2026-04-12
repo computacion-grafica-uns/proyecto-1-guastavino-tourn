@@ -28,17 +28,64 @@ public class CameraManager : MonoBehaviour
         myCamera.GetComponent<Camera>().backgroundColor = Color.black;
         myCamera.GetComponent<Camera>().nearClipPlane = 0.01f;
         myCamera.GetComponent<Camera>().farClipPlane = 10000f;
+        InitializeFirstPerson();
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Tab))
+        {
             orbitalMode = !orbitalMode;
+
+            if (orbitalMode)
+                InitializeOrbital();
+            else
+                InitializeFirstPerson();
+        }
 
         if (orbitalMode)
             UpdateOrbital();
         else
             UpdateFirstPerson();
+    }
+
+    private void InitializeFirstPerson()
+    {
+        pos = new Vector3(5f, 1f, -10f);
+        yaw = 0f;
+        pitch = 0f;
+
+        float pitchRad = pitch * Mathf.Deg2Rad;
+        float yawRad = yaw * Mathf.Deg2Rad;
+
+        Vector3 forward = new Vector3(
+            Mathf.Cos(pitchRad) * Mathf.Sin(yawRad),
+            Mathf.Sin(pitchRad),
+            Mathf.Cos(pitchRad) * Mathf.Cos(yawRad)
+        ).normalized;
+
+        target = pos + forward;
+        ApplyViewMatrix();
+    }
+
+    private void InitializeOrbital()
+    {
+        orbitDistance = 45f;
+        orbitYaw = 0f;
+        orbitPitch = 30f;
+        orbitTarget = new Vector3(0f, 0f, 0f);
+
+        float pitchRad = orbitPitch * Mathf.Deg2Rad;
+        float yawRad = orbitYaw * Mathf.Deg2Rad;
+
+        pos = orbitTarget + new Vector3(
+            Mathf.Cos(pitchRad) * Mathf.Sin(yawRad),
+            Mathf.Sin(pitchRad),
+            Mathf.Cos(pitchRad) * Mathf.Cos(yawRad)
+        ) * orbitDistance;
+
+        target = orbitTarget;
+        ApplyViewMatrix();
     }
 
     private void UpdateOrbital()
@@ -80,7 +127,7 @@ public class CameraManager : MonoBehaviour
         if (Input.GetKey(KeyCode.UpArrow)) rotateVertical = 1f;
         if (Input.GetKey(KeyCode.DownArrow)) rotateVertical = -1f;
 
-        float rotationSpeed = 50f;
+        float rotationSpeed = 90f;
 
         yaw += rotateHorizontal * rotationSpeed * Time.deltaTime;
         pitch += rotateVertical * rotationSpeed * Time.deltaTime;

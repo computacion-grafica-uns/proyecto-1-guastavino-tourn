@@ -16,10 +16,8 @@ public class Projecto1 : MonoBehaviour
         createBathroom();
         createCeiling();
         createFurniture();
-
         GameObject cameraGO = new GameObject("CameraController");
         CameraManager cam = cameraGO.AddComponent<CameraManager>();
-
         float fov = 100;
         float aspectRatio = 16 / (float)9;
         float nearClipPlane = 0.1f;
