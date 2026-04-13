@@ -28,8 +28,7 @@ Shader "SimpleShader"
 			v2f vert (appdata v)
 			{
 				v2f o;
-				//o.vertex = UnityObjectToClipPos(v.vertex);
-				o.vertex = mul( mul (UNITY_MATRIX_P, mul (UNITY_MATRIX_V, _ModelMatrix)), v.vertex);
+				o.vertex=mul(mul(UNITY_MATRIX_P,mul(_ViewMatrix,_ModelMatrix)),v.vertex);
 				o.color = v.color;
 				return o;
 			}

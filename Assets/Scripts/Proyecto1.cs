@@ -18,16 +18,6 @@ public class Projecto1 : MonoBehaviour
         createFurniture();
         GameObject cameraGO = new GameObject("CameraController");
         CameraManager cam = cameraGO.AddComponent<CameraManager>();
-        float fov = 100;
-        float aspectRatio = 16 / (float)9;
-        float nearClipPlane = 0.1f;
-        float farClipPlane = 1000;
-        Matrix4x4 proj = CalculatePerspectiveProjectMatrix(fov, aspectRatio, nearClipPlane, farClipPlane);
-        foreach (Renderer r in FindObjectsByType<Renderer>(FindObjectsSortMode.None))
-        {
-            if (r.sharedMaterial != null && r.sharedMaterial.HasProperty("_ProjectionMatrix"))
-                r.sharedMaterial.SetMatrix("_ProjectionMatrix", GL.GetGPUProjectionMatrix(proj, true));
-        }
     }
 
     private void createFurniture()
@@ -70,18 +60,6 @@ public class Projecto1 : MonoBehaviour
             new Vector3(1, 1, 1)
         );  
 
-        // var (wardrobe2, wardrobe2Half) = loadObject(
-        //     "muebles/Wardrobes/Wardrobe2/Wardrobe2",
-        //     "wardrobe2",
-        //     "Wardrobe2Texture"
-        // );
-        // changeposition(
-        //     wardrobe2,
-        //     new Vector3(width - wallThickness - wardrobe2Half.x, wardrobe2Half.y,  wallThickness + wardrobe2Half.z + sofaHalf.z*2 + 0.5f),
-        //     new Vector3(0, 180* Mathf.Deg2Rad, 0),
-        //     new Vector3(1, 1, 1)
-        // ); 
-
         var (halfWardrobe, wardrobe2Half) = loadObject(
             "muebles/Wardrobes/HalfWardrobe/HalfWardrobe",
             "HalfWardrobe",
@@ -94,7 +72,6 @@ public class Projecto1 : MonoBehaviour
             new Vector3(0, 180* Mathf.Deg2Rad, 0),
             new Vector3(1, 1, 1)
         ); 
-
 
         var (wardrobe1, wardrobe1Half) = loadObject(
             "muebles/Wardrobes/Wardrobe1/Wardrobe1",
@@ -561,6 +538,7 @@ public class Projecto1 : MonoBehaviour
 
     }
 
+    
     private void changePosition(GameObject obj,Vector3 newPosition, Vector3 newRotation, Vector3 newScale){
         Matrix4x4 modelMatrix = CreateModelMatrix(newPosition, newRotation, newScale);
         obj.GetComponent<Renderer>().material.SetMatrix("_ModelMatrix", modelMatrix);
@@ -621,18 +599,6 @@ public class Projecto1 : MonoBehaviour
         finalMatrix *= scaleMatrix;
 
         return finalMatrix;
-    }
-
-    private Matrix4x4 CalculatePerspectiveProjectMatrix(float fov, float aspect, float n, float f)
-    {
-        Matrix4x4 perspectiveProjectMatrix = new Matrix4x4(
-            new Vector4(1 / (aspect * Mathf.Tan(fov / 2)), 0f, 0f, 0f),
-            new Vector4(0f, 1 / Mathf.Tan(fov / 2), 0f, 0f),
-            new Vector4(0f, 0f, (f + n) / (n - f), (2 * f * n) / (n - f)),
-            new Vector4(0f, 0f, -1f, 0f)
-        );
-
-        return perspectiveProjectMatrix.transpose;
     }
 
     private void Update()

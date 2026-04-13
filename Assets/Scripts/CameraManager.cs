@@ -20,6 +20,11 @@ public class CameraManager : MonoBehaviour
     private float mouseSensitivity = 2f;
     private float yaw = 0f;
     private float pitch = 0f;
+    private float fov = 100;
+    private float aspectRatio = 16 / (float)9;
+    private float nearClipPlane = 0.1f;
+    private float farClipPlane = 1000;
+    
     void Start()
     {
         myCamera = new GameObject("Camera");
@@ -28,8 +33,12 @@ public class CameraManager : MonoBehaviour
         myCamera.GetComponent<Camera>().backgroundColor = Color.black;
         myCamera.GetComponent<Camera>().nearClipPlane = 0.01f;
         myCamera.GetComponent<Camera>().farClipPlane = 10000f;
+
+
+        ApplyProjectionMatrix();
         InitializeFirstPerson();
     }
+
 
     void Update()
     {
@@ -90,24 +99,18 @@ public class CameraManager : MonoBehaviour
 
     private void UpdateOrbital()
     {
-        // Rotar alrededor del punto con A/D, subir/bajar con W/S
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) orbitYaw -= mouseSensitivity * 50f * Time.deltaTime;
         if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) orbitYaw += mouseSensitivity * 50f * Time.deltaTime;
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) orbitPitch += mouseSensitivity * 50f * Time.deltaTime;
         if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) orbitPitch -= mouseSensitivity * 50f * Time.deltaTime;
 
-        // Scroll o Shift/Space para acercar/alejar
         orbitDistance -= Input.GetAxis("Mouse ScrollWheel") * 5f;
         if (Input.GetKey(KeyCode.Space)) orbitDistance -= cameraSpeed * Time.deltaTime;
         if (Input.GetKey(KeyCode.LeftShift)) orbitDistance += cameraSpeed * Time.deltaTime;
-        //orbitDistance = Mathf.Clamp(orbitDistance, 1f, 50f);
-
-        //orbitPitch = Mathf.Clamp(orbitPitch, -89f, 89f);
 
         float pitchRad = orbitPitch * Mathf.Deg2Rad;
         float yawRad = orbitYaw * Mathf.Deg2Rad;
 
-        // Calcular posición de la cámara alrededor del orbitTarget
         pos = orbitTarget + new Vector3(
             Mathf.Cos(pitchRad) * Mathf.Sin(yawRad),
             Mathf.Sin(pitchRad),
@@ -180,6 +183,18 @@ public class CameraManager : MonoBehaviour
         return viewMatrix.transpose;
     }
 
+        private Matrix4x4 CreateProjectionMatrix(float fov, float aspect, float n, float f)
+    {
+        Matrix4x4 perspectiveProjectMatrix = new Matrix4x4(
+            new Vector4(1 / (aspect * Mathf.Tan(fov / 2)), 0f, 0f, 0f),
+            new Vector4(0f, 1 / Mathf.Tan(fov / 2), 0f, 0f),
+            new Vector4(0f, 0f, (f + n) / (n - f), (2 * f * n) / (n - f)),
+            new Vector4(0f, 0f, -1f, 0f)
+        );
+
+        return perspectiveProjectMatrix.transpose;
+    }
+
     private void ApplyViewMatrix()
     {
         Matrix4x4 viewMatrix = CreateViewMatrix(pos, target, up);
@@ -191,5 +206,14 @@ public class CameraManager : MonoBehaviour
 
         myCamera.transform.position = pos;
         myCamera.transform.LookAt(target, up);
+    }
+    private void ApplyProjectionMatrix()
+    {
+        Matrix4x4 proj = CreateProjectionMatrix(fov, aspectRatio, nearClipPlane, farClipPlane);
+        foreach (Renderer r in FindObjectsByType<Renderer>(FindObjectsSortMode.None))
+        {
+            if (r.sharedMaterial != null && r.sharedMaterial.HasProperty("_ProjectionMatrix"))
+                r.sharedMaterial.SetMatrix("_ProjectionMatrix", GL.GetGPUProjectionMatrix(proj, true));
+        }
     }
 }
