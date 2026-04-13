@@ -29,6 +29,10 @@ Shader "FloorShader"
             float  _VeinStrength;
             float  _GapSize;
 
+            uniform float4x4 _ModelMatrix;
+			uniform float4x4 _ViewMatrix;
+			uniform float4x4 _ProjectionMatrix;
+
             // ── Structs ───────────────────────────────────────────────
             struct appdata
             {

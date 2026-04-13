@@ -11,10 +11,11 @@ public class Projecto1 : MonoBehaviour
     private float bathroomDepth = 4.5f;
     void Start()
     {
-        createFloor();
+         
+        //createFloor();
         createWalls();
         createBathroom();
-        createCeiling();
+        //createCeiling();
         createFurniture();
         GameObject cameraGO = new GameObject("CameraController");
         CameraManager cam = cameraGO.AddComponent<CameraManager>();
@@ -24,8 +25,8 @@ public class Projecto1 : MonoBehaviour
     {
         createBed();
         createWardrobeSofa();
-        createBathroomFurniture();
-        createKitchenFurniture();
+        // createBathroomFurniture();
+        // createKitchenFurniture();
         createChairsAndTables();
     }
 
@@ -422,7 +423,7 @@ public class Projecto1 : MonoBehaviour
 
     private void createBathroom()
     {
-        createBathroomFloor();
+        //createBathroomFloor();
         createBathroomWalls();
     }
 

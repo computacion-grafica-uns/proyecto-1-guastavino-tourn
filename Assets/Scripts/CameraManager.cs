@@ -200,8 +200,9 @@ public class CameraManager : MonoBehaviour
         Matrix4x4 viewMatrix = CreateViewMatrix(pos, target, up);
         foreach (Renderer r in FindObjectsByType<Renderer>(FindObjectsSortMode.None))
         {
-            if (r.material.HasProperty("_ViewMatrix"))
-                r.material.SetMatrix("_ViewMatrix", viewMatrix);
+            r.material.SetMatrix("_ViewMatrix", viewMatrix);
+            Matrix4x4 v = r.material.GetMatrix("_ViewMatrix");
+            Debug.Log($"_ViewMatrix :\n{MatrixToString(v)}");
         }
 
         myCamera.transform.position = pos;
@@ -212,8 +213,16 @@ public class CameraManager : MonoBehaviour
         Matrix4x4 proj = CreateProjectionMatrix(fov, aspectRatio, nearClipPlane, farClipPlane);
         foreach (Renderer r in FindObjectsByType<Renderer>(FindObjectsSortMode.None))
         {
-            if (r.sharedMaterial != null && r.sharedMaterial.HasProperty("_ProjectionMatrix"))
-                r.sharedMaterial.SetMatrix("_ProjectionMatrix", GL.GetGPUProjectionMatrix(proj, true));
+                r.sharedMaterial.SetMatrix("_ProjectionMatrix", proj);
         }
+    }
+
+    private string MatrixToString(Matrix4x4 m)
+    {
+        return
+            $"{m.m00:F3}\t{m.m01:F3}\t{m.m02:F3}\t{m.m03:F3}\n" +
+            $"{m.m10:F3}\t{m.m11:F3}\t{m.m12:F3}\t{m.m13:F3}\n" +
+            $"{m.m20:F3}\t{m.m21:F3}\t{m.m22:F3}\t{m.m23:F3}\n" +
+            $"{m.m30:F3}\t{m.m31:F3}\t{m.m32:F3}\t{m.m33:F3}";
     }
 }

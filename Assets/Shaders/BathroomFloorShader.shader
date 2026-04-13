@@ -30,6 +30,10 @@ Shader "BathroomFloorShader"
             float4 _GroutColor;
             float  _Glossiness;
             float  _VariationStr;
+            
+            uniform float4x4 _ModelMatrix;
+			uniform float4x4 _ViewMatrix;
+			uniform float4x4 _ProjectionMatrix;
 
             // ── Structs ───────────────────────────────────────────────
             struct appdata
