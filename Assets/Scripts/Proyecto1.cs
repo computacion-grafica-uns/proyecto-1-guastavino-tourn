@@ -283,52 +283,28 @@ public class Projecto1 : MonoBehaviour
     }
     private void createFloor()
     {
-        Vector3[] floorVertices;
-        int[] floorFaces;
-        GameObject floor;
-        floor = new GameObject("Floor");
-        floor.AddComponent<MeshFilter>();
-        floor.GetComponent<MeshFilter>().mesh = new Mesh();
-        floor.AddComponent<MeshRenderer>();
-        floorVertices = new Vector3[]
-        {
-            // Triangle 1
-            new Vector3(bathroomWidth - wallThickness,0,0),
-            new Vector3(bathroomWidth - wallThickness,0,depth),
-            new Vector3(width,0,0),
+        var (mainFloor, mainFloorHalf) = loadObject(
+            "floor/mainFloor",
+            "mainFloor",
+            "",
+            rgba(243, 243, 243)
+        );
 
-            // Triangle 2
-            new Vector3(bathroomWidth - wallThickness,0,depth),
-            new Vector3(width,0,depth),
-            new Vector3(width,0,0),
-
-             // Triangle 3
-            new Vector3(0,0,bathroomDepth),
-            new Vector3(0,0,depth),
-            new Vector3(bathroomWidth,0,bathroomDepth),
-
-            // Triangle 4
-            new Vector3(0,0,depth),
-            new Vector3(bathroomWidth,0,depth),
-            new Vector3(bathroomWidth,0,bathroomDepth),
-
-        };
-
-        floorFaces = new int[floorVertices.Length];
-        for (int i = 0; i < floorFaces.Length; i++)
-            floorFaces[i] = i;
-
-        Color[] floorColors = new Color[0];
-        UpdateMesh(floor, floorVertices, floorFaces, floorColors);
-
-        floor.GetComponent<MeshRenderer>().material = new Material(Shader.Find("FloorShader"));
-        Renderer r = floor.GetComponent<Renderer>();
+        Renderer r = mainFloor.GetComponent<Renderer>();
+        r.material = new Material(Shader.Find("FloorShader"));
         r.material.SetFloat("_PlankWidth", 0.2f);
         r.material.SetFloat("_PlankLength", 1.0f);
         r.material.SetColor("_WoodLight", new Color(0.76f, 0.60f, 0.42f));
         r.material.SetColor("_WoodDark", new Color(0.45f, 0.30f, 0.18f));
         r.material.SetFloat("_VeinStrength", 0.3f);
         r.material.SetFloat("_GapSize", 0.01f);
+
+        changePosition(
+            mainFloor,
+            new Vector3(mainFloorHalf.x, 0f, mainFloorHalf.z),
+            new Vector3(0f, 0f, 0f),
+            new Vector3(1f, 1f, 1f)
+        );
     }
 
     private void createWalls()
@@ -429,36 +405,15 @@ public class Projecto1 : MonoBehaviour
 
     private void createBathroomFloor()
     {
-        Vector3[] bathroomFloorVertices;
-        int[] bathroomFloorFaces;
-        GameObject bathroomFloor;
-        bathroomFloor = new GameObject("BathroomFloor");
-        bathroomFloor.AddComponent<MeshFilter>();
-        bathroomFloor.GetComponent<MeshFilter>().mesh = new Mesh();
-        bathroomFloor.AddComponent<MeshRenderer>();
-        bathroomFloorVertices = new Vector3[]
-        {
-            // Triangle 1
-            new Vector3(0,0,0),
-            new Vector3(0,0,bathroomDepth),
-            new Vector3(bathroomWidth - wallThickness,0,0),
+        var (bathroomFloor, bathroomFloorHalf) = loadObject(
+            "floor/bathroomFloor",
+            "BathroomFloor",
+            "",
+            rgba(243, 243, 243)
+        );
 
-            // Triangle 2
-            new Vector3(bathroomWidth - wallThickness,0,0),
-            new Vector3(0,0,bathroomDepth),
-            new Vector3(bathroomWidth - wallThickness,0,bathroomDepth),
-
-        };
-
-        bathroomFloorFaces = new int[bathroomFloorVertices.Length];
-        for (int i = 0; i < bathroomFloorFaces.Length; i++)
-            bathroomFloorFaces[i] = i;
-
-        Color[] bathroomFloorColors = new Color[0];
-        UpdateMesh(bathroomFloor, bathroomFloorVertices, bathroomFloorFaces, bathroomFloorColors);
-
-        bathroomFloor.GetComponent<MeshRenderer>().material = new Material(Shader.Find("BathroomFloorShader"));
         Renderer r = bathroomFloor.GetComponent<Renderer>();
+        r.material = new Material(Shader.Find("BathroomFloorShader"));
         r.material.SetFloat("_TileSize", 0.5f);
         r.material.SetFloat("_GapSize", 0.02f);
         r.material.SetColor("_TileLight", new Color(0.92f, 0.92f, 0.92f));
@@ -466,6 +421,13 @@ public class Projecto1 : MonoBehaviour
         r.material.SetColor("_GroutColor", new Color(0.30f, 0.30f, 0.30f));
         r.material.SetFloat("_Glossiness", 0.85f);
         r.material.SetFloat("_VariationStr", 0.1f);
+
+        changePosition(
+            bathroomFloor,
+            new Vector3(bathroomFloorHalf.x, 0f, bathroomFloorHalf.z),
+            new Vector3(0f, 0f, 0f),
+            new Vector3(1f, 1f, 1f)
+        );
     }
 
     private void createBathroomWalls()
