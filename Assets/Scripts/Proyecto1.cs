@@ -12,10 +12,10 @@ public class Projecto1 : MonoBehaviour
     void Start()
     {
          
-        //createFloor();
+        createFloor();
         createWalls();
         createBathroom();
-        //createCeiling();
+        createCeiling();
         createFurniture();
         GameObject cameraGO = new GameObject("CameraController");
         CameraManager cam = cameraGO.AddComponent<CameraManager>();
@@ -25,8 +25,8 @@ public class Projecto1 : MonoBehaviour
     {
         createBed();
         createWardrobeSofa();
-        // createBathroomFurniture();
-        // createKitchenFurniture();
+        createBathroomFurniture();
+        createKitchenFurniture();
         createChairsAndTables();
     }
 
@@ -523,6 +523,7 @@ public class Projecto1 : MonoBehaviour
         Vector3[] vertices = fileReader.GetVertexes();
         mesh.vertices = vertices;
         mesh.triangles = fileReader.GetFaces();
+        mesh.bounds = new Bounds(Vector3.zero, Vector3.one * 10000f);
 
         Color[] colors = new Color[vertices.Length];
         for (int i = 0; i < colors.Length; i++)

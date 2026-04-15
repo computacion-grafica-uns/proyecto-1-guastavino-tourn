@@ -20,7 +20,7 @@ public class CameraManager : MonoBehaviour
     private float mouseSensitivity = 2f;
     private float yaw = 0f;
     private float pitch = 0f;
-    private float fov = 100;
+    private float fov = 60;
     private float aspectRatio = 16 / (float)9;
     private float nearClipPlane = 0.1f;
     private float farClipPlane = 1000;
@@ -185,9 +185,10 @@ public class CameraManager : MonoBehaviour
 
         private Matrix4x4 CreateProjectionMatrix(float fov, float aspect, float n, float f)
     {
+        float fovRad = fov * Mathf.Deg2Rad;
         Matrix4x4 perspectiveProjectMatrix = new Matrix4x4(
-            new Vector4(1 / (aspect * Mathf.Tan(fov / 2)), 0f, 0f, 0f),
-            new Vector4(0f, 1 / Mathf.Tan(fov / 2), 0f, 0f),
+            new Vector4(1 / (aspect * Mathf.Tan(fovRad / 2)), 0f, 0f, 0f),
+            new Vector4(0f, 1 / Mathf.Tan(fovRad / 2), 0f, 0f),
             new Vector4(0f, 0f, (f + n) / (n - f), (2 * f * n) / (n - f)),
             new Vector4(0f, 0f, -1f, 0f)
         );
@@ -213,7 +214,7 @@ public class CameraManager : MonoBehaviour
         Matrix4x4 proj = CreateProjectionMatrix(fov, aspectRatio, nearClipPlane, farClipPlane);
         foreach (Renderer r in FindObjectsByType<Renderer>(FindObjectsSortMode.None))
         {
-                r.sharedMaterial.SetMatrix("_ProjectionMatrix", proj);
+                r.sharedMaterial.SetMatrix("_ProjectionMatrix", GL.GetGPUProjectionMatrix(proj, true));
         }
     }
 

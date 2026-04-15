@@ -28,7 +28,7 @@ Shader "SimpleShader"
 			v2f vert (appdata v)
 			{
 				v2f o;
-				o.vertex=mul(mul(_ProjectionMatrix,mul(_ViewMatrix,_ModelMatrix)),v.vertex);
+				o.vertex=mul(_ProjectionMatrix,mul(_ViewMatrix,mul(_ModelMatrix,v.vertex)));
 				o.color = v.color;
 				return o;
 			}
