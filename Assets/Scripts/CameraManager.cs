@@ -14,7 +14,7 @@ public class CameraManager : MonoBehaviour
     private float orbitDistance = 45f;
     private float orbitYaw = 0f;
     private float orbitPitch = 30f;
-    private Vector3 orbitTarget = new Vector3(0f, 0f, 0f);
+    private Vector3 orbitTarget = new Vector3(5f, 0f, 5f);
 
     private float cameraSpeed = 10f;
     private float mouseSensitivity = 2f;
@@ -82,7 +82,7 @@ public class CameraManager : MonoBehaviour
         orbitDistance = 45f;
         orbitYaw = 0f;
         orbitPitch = 30f;
-        orbitTarget = new Vector3(0f, 0f, 0f);
+        orbitTarget = new Vector3(5f, 0f, 5f);
 
         float pitchRad = orbitPitch * Mathf.Deg2Rad;
         float yawRad = orbitYaw * Mathf.Deg2Rad;
@@ -187,7 +187,7 @@ public class CameraManager : MonoBehaviour
     {
         float fovRad = fov * Mathf.Deg2Rad;
         Matrix4x4 perspectiveProjectMatrix = new Matrix4x4(
-            new Vector4(1 / (aspect * Mathf.Tan(fovRad / 2)), 0f, 0f, 0f),
+            new Vector4(-1 / (aspect * Mathf.Tan(fovRad / 2)), 0f, 0f, 0f),
             new Vector4(0f, 1 / Mathf.Tan(fovRad / 2), 0f, 0f),
             new Vector4(0f, 0f, (f + n) / (n - f), (2 * f * n) / (n - f)),
             new Vector4(0f, 0f, -1f, 0f)

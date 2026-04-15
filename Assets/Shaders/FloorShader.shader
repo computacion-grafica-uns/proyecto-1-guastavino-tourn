@@ -49,8 +49,13 @@ Shader "FloorShader"
             v2f vert(appdata v)
             {
                 v2f o;
-                o.clipPos  = UnityObjectToClipPos(v.vertex);
-                o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+
+                // Posición en mundo usando tu _ModelMatrix
+                float4 worldPos4 = mul(_ModelMatrix, v.vertex);
+                o.worldPos = worldPos4.xyz;
+
+                // Posición en clip space usando tus matrices de vista/proyección
+                o.clipPos = mul(_ProjectionMatrix, mul(_ViewMatrix, worldPos4));
                 return o;
             }
 			// ── Fragment ──────────────────────────────────────────────

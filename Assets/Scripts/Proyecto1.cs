@@ -423,7 +423,7 @@ public class Projecto1 : MonoBehaviour
 
     private void createBathroom()
     {
-        //createBathroomFloor();
+        createBathroomFloor();
         createBathroomWalls();
     }
 
