@@ -11,7 +11,7 @@ public class CameraManager : MonoBehaviour
     private Vector3 target = new Vector3(0, 0, 1);
     private Vector3 up = new Vector3(0, 1, 0);
     private bool orbitalMode = false;
-    private float orbitDistance = 45f;
+    private float orbitDistance = 30f;
     private float orbitYaw = 0f;
     private float orbitPitch = 30f;
     private Vector3 orbitTarget = new Vector3(5f, 0f, 5f);
@@ -79,7 +79,7 @@ public class CameraManager : MonoBehaviour
 
     private void InitializeOrbital()
     {
-        orbitDistance = 45f;
+        orbitDistance = 30f;
         orbitYaw = 0f;
         orbitPitch = 30f;
         orbitTarget = new Vector3(5f, 0f, 5f);
