@@ -80,7 +80,7 @@ public class CameraManager : MonoBehaviour
     private void InitializeOrbital()
     {
         orbitDistance = 30f;
-        orbitYaw = 0f;
+        orbitYaw = 180f;
         orbitPitch = 30f;
         orbitTarget = new Vector3(5f, 0f, 5f);
 
@@ -99,8 +99,8 @@ public class CameraManager : MonoBehaviour
 
     private void UpdateOrbital()
     {
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) orbitYaw -= mouseSensitivity * 50f * Time.deltaTime;
-        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) orbitYaw += mouseSensitivity * 50f * Time.deltaTime;
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) orbitYaw += mouseSensitivity * 50f * Time.deltaTime;
+        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) orbitYaw -= mouseSensitivity * 50f * Time.deltaTime;
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) orbitPitch += mouseSensitivity * 50f * Time.deltaTime;
         if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) orbitPitch -= mouseSensitivity * 50f * Time.deltaTime;
 
