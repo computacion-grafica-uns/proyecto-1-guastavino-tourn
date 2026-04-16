@@ -210,7 +210,7 @@ public class SceneManager : MonoBehaviour
         changePosition(
             Fridge,
             new Vector3( wallThickness + KitchenCabinetRoundedHalf.x * 2 + FridgeHalf.x, FridgeHalf.y, depth - wallThickness - FridgeHalf.z ),
-            new Vector3(0, 90 * Mathf.Deg2Rad, 0),
+            new Vector3(0, 90 * Mathf.Deg2Rad, 0)
         ); 
     }
     private Color rgba(float r, float g, float b, float a = 255)
