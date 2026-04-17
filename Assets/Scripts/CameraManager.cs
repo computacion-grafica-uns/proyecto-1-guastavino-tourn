@@ -60,7 +60,7 @@ public class CameraManager : MonoBehaviour
 
     private void InitializeFirstPerson()
     {
-        pos = new Vector3(5f, 1f, -10f);
+        pos = new Vector3(5f, 1.6f, -10f);
         yaw = 0f;
         pitch = 0f;
 

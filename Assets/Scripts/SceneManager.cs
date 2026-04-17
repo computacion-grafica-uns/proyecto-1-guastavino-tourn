@@ -56,7 +56,7 @@ public class SceneManager : MonoBehaviour
         );
         changePosition(
             sofa,
-            new Vector3(width - wallThickness - sofaHalf.x, sofaHalf.y,  wallThickness + sofaHalf.z),
+            new Vector3(-0.1f + width - wallThickness - sofaHalf.x, sofaHalf.y,0.1f + wallThickness + sofaHalf.z),
             new Vector3(0, -90* Mathf.Deg2Rad, 0)
         );  
 
