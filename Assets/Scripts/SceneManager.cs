@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class SceneManager : MonoBehaviour
 {
@@ -52,7 +51,7 @@ public class SceneManager : MonoBehaviour
             "muebles/sofa`s/sofa90degrees/90degreesSofa",
             "sofa",
             "sofa90degreesTextureBlue",
-            rgba(92, 93, 54)
+            rgba(11, 97, 41)
         );
         changePosition(
             sofa,
@@ -154,8 +153,21 @@ public class SceneManager : MonoBehaviour
         );
         changePosition(
             KitchenCabinetRounded,
-            new Vector3( wallThickness + KitchenCabinetRoundedHalf.x, KitchenCabinetRoundedHalf.y, depth - wallThickness - KitchenCabinetRoundedHalf.z)
-        ); 
+            new Vector3(wallThickness + KitchenCabinetRoundedHalf.x, KitchenCabinetRoundedHalf.y, depth - wallThickness - KitchenCabinetRoundedHalf.z)
+        );
+
+        var (choripan, choripanHalf) = loadObject(
+            "choripan",
+            "choripan",
+            "choripanTexture",
+            rgba(161, 129, 68)
+        );
+        changePosition(
+            choripan,
+            new Vector3(wallThickness + KitchenCabinetRoundedHalf.x*1.5f, KitchenCabinetRoundedHalf.y * 2 - choripanHalf.y * 0.25f, depth - wallThickness - KitchenCabinetRoundedHalf.z*0.5f),
+            new Vector3(0, -90 * Mathf.Deg2Rad, 0),
+            newScale: new Vector3(0.25f, 0.25f, 0.25f)
+        );
 
         var (KitchenStove2, KitchenStove2Half) = loadObject(
             "muebles/Kitchen/Cabinets/KitchenStove2/KitchenStove2",
@@ -251,8 +263,20 @@ public class SceneManager : MonoBehaviour
             chair2,
             new Vector3(width - wallThickness - chair2Half.x - 2.7f, chair2Half.y, depth - wallThickness - tableHalf.z),
             new Vector3(0, 180* Mathf.Deg2Rad, 0)
-        ); 
+        );
 
+        var (mate, mateHalf) = loadObject(
+            "mate",
+            "mate",
+            "mateTexture",
+            rgba(5, 51, 21)
+        );
+        changePosition(
+            mate,
+            new Vector3(width - wallThickness - mateHalf.x - 2.1f,tableHalf.y*2 + mateHalf.y*0.1f, depth - wallThickness - tableHalf.z),
+            new Vector3(0, -90 * Mathf.Deg2Rad, 0),
+            newScale: new Vector3(0.1f, 0.1f, 0.1f)
+        );
     }
     private void createFloor()
     {
@@ -433,7 +457,7 @@ public class SceneManager : MonoBehaviour
         _walls.Add(bathroomSideWall);
     }
 
-    private (GameObject obj, Vector3 halfExtents) loadObject(String path, String name, String texture, Color color)
+    private (GameObject obj, Vector3 halfExtents) loadObject(String path, String name, String texture, Color color, bool recNorm = false)
     {
         FileReader fileReader = new FileReader();
         fileReader.ReadFile(path);
@@ -441,6 +465,7 @@ public class SceneManager : MonoBehaviour
         GameObject obj = new GameObject(name);
         obj.AddComponent<MeshFilter>();
         obj.GetComponent<MeshFilter>().mesh = new Mesh();
+        if (recNorm) { obj.GetComponent<MeshFilter>().mesh.RecalculateNormals(); } 
         obj.AddComponent<MeshRenderer>();
 
         Mesh mesh = obj.GetComponent<MeshFilter>().mesh;

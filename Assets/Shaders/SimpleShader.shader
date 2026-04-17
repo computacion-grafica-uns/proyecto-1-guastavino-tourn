@@ -4,8 +4,6 @@ Shader "SimpleShader"
 	{
 		Pass 
 		{
-			//Cull off
-
 			CGPROGRAM
 
 			#pragma vertex vert

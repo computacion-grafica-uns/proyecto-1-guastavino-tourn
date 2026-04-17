@@ -30,35 +30,6 @@ public class FileReader
         ReadEachLine(fileData, folder);
     }
 
-    private void ReadMtlFile(string mtlPath)
-    {
-        if (!File.Exists(mtlPath))
-        {
-            Debug.LogWarning("No se encontró el .mtl en: " + mtlPath);
-            return;
-        }
-
-        string[] lines = File.ReadAllLines(mtlPath);
-        string currentMaterial = "";
-
-        foreach (string line in lines)
-        {
-            string trimmed = line.Trim();
-            if (trimmed.StartsWith("newmtl "))
-            {
-                currentMaterial = trimmed.Substring(7).Trim();
-            }
-            else if (trimmed.StartsWith("Kd ") && currentMaterial != "")
-            {
-                string[] parts = trimmed.Split(' ');
-                float r = float.Parse(parts[1], CultureInfo.InvariantCulture);
-                float g = float.Parse(parts[2], CultureInfo.InvariantCulture);
-                float b = float.Parse(parts[3], CultureInfo.InvariantCulture);
-                materials[currentMaterial] = new Color(r, g, b);
-            }
-        }
-    }
-
     private void ReadEachLine(string fileData, string folder)
     {
         List<Vector3> rawVertices = new List<Vector3>();
@@ -69,17 +40,7 @@ public class FileReader
         {
             string line = lines[i].Trim();
 
-            if (line.StartsWith("mtllib "))
-            {
-                string mtlFile = line.Substring(7).Trim();
-                ReadMtlFile(folder + mtlFile);
-            }
-            else if (line.StartsWith("usemtl "))
-            {
-                string matName = line.Substring(7).Trim();
-                currentColor = materials.ContainsKey(matName) ? materials[matName] : Color.white;
-            }
-            else if (line.StartsWith("vt "))
+            if (line.StartsWith("vt "))
             {
                 string[] parts = line.Split(' ', System.StringSplitOptions.RemoveEmptyEntries);
                 float u = float.Parse(parts[1], CultureInfo.InvariantCulture);
@@ -164,7 +125,6 @@ public class FileReader
     public Vector3[] GetVertexes() => vertices.ToArray();
     public int[] GetFaces() => faces.ToArray();
     public Color[] GetColors() => faceColors.ToArray();
-    public Vector2[] GetUVs() => uvList.ToArray();
     public Vector3 GetCenter() => centro;
     public Vector3 GetSize() => new Vector3(maxx - minx, maxy - miny, maxz - minz);
     public Vector3 GetHalfExtents() => GetSize() * 0.5f;
