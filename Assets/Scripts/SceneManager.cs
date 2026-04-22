@@ -257,6 +257,18 @@ public class SceneManager : MonoBehaviour
             new Vector3( wallThickness + UpperCabinetHalf.x, height-UpperCabinetHalf.y-0.05f, depth - wallThickness - UpperCabinetHalf.z )
         ); 
 
+        var (UpperCabinet2, UpperCabinet2Half) = loadObject(
+            "muebles/Kitchen/Cabinets/UpperCabinet/UpperCabinet",
+            "KitchenCabinet2",
+            "",
+            rgba(67, 46, 34)
+        );
+        changePosition(
+            UpperCabinet2,
+            new Vector3( wallThickness + KitchenCabinetWithOvenHalf.x, height-UpperCabinet2Half.y-0.05f, depth - wallThickness - KitchenCabinetRoundedHalf.z * 2 - KitchenStove2Half.z * 2 - KitchenCabinetWithOvenHalf.z*2 - KitchenCabinet1Half.z)
+        ); 
+        
+
         var (Fridge, FridgeHalf) = loadObject(
             "muebles/Kitchen/Fridge/Fridge",
             "Fridge",
@@ -268,6 +280,7 @@ public class SceneManager : MonoBehaviour
             new Vector3( wallThickness + KitchenCabinetRoundedHalf.x * 2 + FridgeHalf.x, FridgeHalf.y, depth - wallThickness - FridgeHalf.z ),
             new Vector3(0, 90 * Mathf.Deg2Rad, 0)
         ); 
+
     }
     private Color rgba(float r, float g, float b, float a = 255)
     {
@@ -377,6 +390,17 @@ public class SceneManager : MonoBehaviour
             frame,
             new Vector3(frontWallHalf.x, frameHalf.y, frameHalf.z)
         );
+         var (Wframe, WframeHalf) = loadObject(
+            "walls/house/windowframe",
+            "windowFrame",
+            "",
+            rgba(33,34,35)
+        );
+        changePosition(
+            Wframe,
+            new Vector3(5.85f+frameHalf.x*2, 1.5f, frameHalf.z)
+        );
+        _walls.Add(Wframe);
         _walls.Add(frame);
         _walls.Add(frontWall);
     }
@@ -408,6 +432,19 @@ public class SceneManager : MonoBehaviour
             leftWall,
             new Vector3(leftWallHalf.x, leftWallHalf.y, leftWallHalf.z)
         );
+
+        var (Wframe2, WframeHalf) = loadObject(
+            "walls/house/windowframe",
+            "windowFram2",
+            "",
+            rgba(33,34,35)
+        );
+        changePosition(
+            Wframe2,
+            new Vector3(WframeHalf.z, 1.25f+WframeHalf.y, 5.9f + WframeHalf.x),
+            new Vector3(0, 90 * Mathf.Deg2Rad, 0)
+        );
+        _walls.Add(Wframe2);
         _walls.Add(leftWall);
     }
 
