@@ -57,35 +57,44 @@ public class SceneManager : MonoBehaviour
         );
 
         Vector3 framePos = new Vector3(
-            width / 2 + pictureFrameHalf.x,
-            height / 2f + pictureFrameHalf.y,
+            width / 2f + pictureFrameHalf.x,
+            height / 2f + pictureFrameHalf.y -0.15f,
             depth - wallThickness - pictureFrameHalf.z - 0.05f
         );
 
         changePosition(pictureFrame, framePos);
 
-        createPictureCanvas(framePos);
+        createPictureCanvas(framePos, pictureFrameHalf);
     }
 
-    private void createPictureCanvas(Vector3 framePosition)
+    private void createPictureCanvas(Vector3 framePosition, Vector3 frameHalf)
     {
-        var (canvas, canvasHalf) = loadObject(
-            "pictureCanvas",
-            "pictureCanvas",
-            "",
-            rgba(255, 255, 255)
-        );
+        float margin = 0.075f;
+        float w = frameHalf.x - margin;
+        float h = frameHalf.y - margin;
+
+        GameObject canvas = new GameObject("PictureCanvas");
+        canvas.AddComponent<MeshFilter>();
+        canvas.AddComponent<MeshRenderer>();
+
+        Mesh mesh = new Mesh();
+        mesh.vertices = new Vector3[]
+        {
+        new Vector3(-w,  h, 0),
+        new Vector3( w,  h, 0),
+        new Vector3( w, -h, 0),
+        new Vector3(-w, -h, 0),
+        };
+        mesh.triangles = new int[] { 0, 1, 2, 0, 2, 3 };
+        mesh.bounds = new Bounds(Vector3.zero, Vector3.one * 10000f);
+        canvas.GetComponent<MeshFilter>().mesh = mesh;
 
         Renderer r = canvas.GetComponent<Renderer>();
         r.material = new Material(Shader.Find("PictureShader"));
 
         changePosition(
             canvas,
-            new Vector3(
-                framePosition.x,
-                framePosition.y,
-                framePosition.z - 0.01f   // ligeramente detrás del marco
-            )
+            new Vector3(framePosition.x, framePosition.y, framePosition.z - 0.01f)
         );
     }
 

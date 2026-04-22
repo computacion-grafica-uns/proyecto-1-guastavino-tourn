@@ -5,7 +5,7 @@ Shader "PictureShader"
         _Scale ("Fractal Scale", Float) = 2
         _OffsetX ("Offset X", Float) = -0.5
         _OffsetY ("Offset Y", Float) = 0.0
-        _Iterations ("Iterations", Float) = 100
+        _Iterations ("Iterations", Float) = 200
     }
 
     SubShader
@@ -58,32 +58,21 @@ Shader "PictureShader"
             // ───── Mandelbrot ──────────────────────
             float mandelbrot(float2 c)
             {
-                float2 z = float2(0,0);
-                int iter = 0;
-                int depth = 512;
-
-                for(int i=0;i<depth;i++)
+                float2 z = float2(0, 0);
+                for (int i = 0; i < _Iterations; i++)
                 {
-                    if(i >= _Iterations) break;
-
                     float x = z.x*z.x - z.y*z.y + c.x;
-                    float y = 2*z.x*z.y + c.y;
-
-                    z = float2(x,y);
-
-                    if(dot(z,z) > 4.0)
-                    {
-                        iter = i;
-                        break;
-                    }
+                    float y = 2.0*z.x*z.y      + c.y;
+                    z = float2(x, y);
+                    if (dot(z, z) > 4.0)
+                        return (float)i / _Iterations;
                 }
-
-                return (float)iter / _Iterations;
+                return 0.0;  // nunca escapó → interior → negro
             }
 
             // ───── Fragment ────────────────────────
             fixed4 frag(v2f i) : SV_Target
-{
+            {
                 float2 p = i.objPos * 4.0;
 
                 float2 c = p / _Scale + float2(_OffsetX,_OffsetY);
