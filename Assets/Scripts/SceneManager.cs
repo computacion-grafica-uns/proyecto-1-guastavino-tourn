@@ -25,6 +25,7 @@ public class SceneManager : MonoBehaviour
     private void createFurniture()
     {
         createBed();
+        createPictureFrame();
         createWardrobeSofa();
         createBathroomFurniture();
         createKitchenFurniture();
@@ -43,6 +44,48 @@ public class SceneManager : MonoBehaviour
             bed,
             new Vector3(width - wallThickness - bedHalf.x, bedHalf.y, depth - wallThickness - bedHalf.z)
         );        
+    }
+
+    private void createPictureFrame()
+    {
+        var (pictureFrame, pictureFrameHalf) = loadObject(
+            "pictureFrame",
+            "pictureFrame",
+            "pictureFrameTexture",
+            rgba(200, 200, 200)
+        );
+
+        Vector3 framePos = new Vector3(
+            width / 2 + pictureFrameHalf.x,
+            height / 2f + pictureFrameHalf.y,
+            depth - wallThickness - pictureFrameHalf.z - 0.05f
+        );
+
+        changePosition(pictureFrame, framePos);
+
+        createPictureCanvas(framePos);
+    }
+
+    private void createPictureCanvas(Vector3 framePosition)
+    {
+        var (canvas, canvasHalf) = loadObject(
+            "pictureCanvas",
+            "pictureCanvas",
+            "",
+            rgba(255, 255, 255)
+        );
+
+        Renderer r = canvas.GetComponent<Renderer>();
+        r.material = new Material(Shader.Find("PictureShader"));
+
+        changePosition(
+            canvas,
+            new Vector3(
+                framePosition.x,
+                framePosition.y,
+                framePosition.z - 0.01f   // ligeramente detrás del marco
+            )
+        );
     }
 
     private void createWardrobeSofa()
