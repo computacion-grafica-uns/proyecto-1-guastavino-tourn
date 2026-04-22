@@ -8,13 +8,8 @@ public class FileReader
     private List<Vector3> vertices = new List<Vector3>();
     private List<int> faces = new List<int>();
     private List<Color> faceColors = new List<Color>();
-    private List<Vector2> uvList = new List<Vector2>();
-    private List<Vector2> rawUVs = new List<Vector2>();
 
-    private Dictionary<string, Color> materials = new Dictionary<string, Color>();
     private Color currentColor = Color.white;
-
-    private Vector3 centro;
     private float minx, miny, minz;
     private float maxx, maxy, maxz;
 
@@ -24,30 +19,20 @@ public class FileReader
         StreamReader reader = new StreamReader(path);
         string fileData = reader.ReadToEnd();
         reader.Close();
-
-        string folder = Path.GetDirectoryName(path).Replace("\\", "/") + "/";
-        //Debug.Log("Folder: " + folder);
-        ReadEachLine(fileData, folder);
+        ReadEachLine(fileData);
     }
 
-    private void ReadEachLine(string fileData, string folder)
+    private void ReadEachLine(string fileData)
     {
         List<Vector3> rawVertices = new List<Vector3>();
-        string[] lines = fileData.Split('\n');
         bool boundsInitialized = false;
+        string[] lines = fileData.Split('\n');
 
         for (int i = 0; i < lines.Length; i++)
         {
             string line = lines[i].Trim();
 
-            if (line.StartsWith("vt "))
-            {
-                string[] parts = line.Split(' ', System.StringSplitOptions.RemoveEmptyEntries);
-                float u = float.Parse(parts[1], CultureInfo.InvariantCulture);
-                float v = float.Parse(parts[2], CultureInfo.InvariantCulture);
-                rawUVs.Add(new Vector2(u, v));
-            }
-            else if (line.StartsWith("v "))
+             if (line.StartsWith("v "))
             {
                 string[] parts = line.Split(' ', System.StringSplitOptions.RemoveEmptyEntries);
                 float x = float.Parse(parts[1], CultureInfo.InvariantCulture);
@@ -56,7 +41,9 @@ public class FileReader
 
                 if (!boundsInitialized)
                 {
-                    minx = maxx = x; miny = maxy = y; minz = maxz = z;
+                    minx = maxx = x;
+                    miny = maxy = y;
+                    minz = maxz = z;
                     boundsInitialized = true;
                 }
                 else
@@ -72,15 +59,12 @@ public class FileReader
             {
                 string[] parts = line.Split(' ', System.StringSplitOptions.RemoveEmptyEntries);
                 List<int> vertIndices = new List<int>();
-                List<int> uvIndices = new List<int>();
 
                 for (int k = 1; k < parts.Length; k++)
                 {
                     string[] split = parts[k].Split('/');
                     if (int.TryParse(split[0], out int vIdx))
                         vertIndices.Add(vIdx - 1);
-                    if (split.Length > 1 && int.TryParse(split[1], out int uvIdx))
-                        uvIndices.Add(uvIdx - 1);
                 }
 
                 for (int k = 1; k < vertIndices.Count - 1; k++)
@@ -95,13 +79,6 @@ public class FileReader
                     faces.Add(nextIndex + 1);
                     faces.Add(nextIndex + 2);
 
-                    if (uvIndices.Count > 0)
-                    {
-                        uvList.Add(rawUVs[uvIndices[0]]);
-                        uvList.Add(rawUVs[uvIndices[k]]);
-                        uvList.Add(rawUVs[uvIndices[k + 1]]);
-                    }
-
                     faceColors.Add(currentColor);
                     faceColors.Add(currentColor);
                     faceColors.Add(currentColor);
@@ -109,23 +86,17 @@ public class FileReader
             }
         }
 
-        centro = new Vector3(
+        Vector3 centro = new Vector3(
             (maxx + minx) * 0.5f,
             (maxy + miny) * 0.5f,
             (maxz + minz) * 0.5f
         );
-
         for (int i = 0; i < vertices.Count; i++)
-        {
-            Vector3 v = vertices[i];
-            vertices[i] = new Vector3(v.x - centro.x, v.y - centro.y, v.z - centro.z);
-        }
+            vertices[i] -= centro;
     }
 
     public Vector3[] GetVertexes() => vertices.ToArray();
     public int[] GetFaces() => faces.ToArray();
-    public Color[] GetColors() => faceColors.ToArray();
-    public Vector3 GetCenter() => centro;
     public Vector3 GetSize() => new Vector3(maxx - minx, maxy - miny, maxz - minz);
     public Vector3 GetHalfExtents() => GetSize() * 0.5f;
 }
