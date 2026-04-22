@@ -32,6 +32,7 @@ public class SceneManager : MonoBehaviour
         createChairsAndTables();
     }
 
+
     private void createBed()
     {
         var (bed, bedHalf) = loadObject(
@@ -94,7 +95,7 @@ public class SceneManager : MonoBehaviour
             "muebles/sofa`s/sofa90degrees/90degreesSofa",
             "sofa",
             "sofa90degreesTextureBlue",
-            rgba(11, 97, 41)
+            rgba(37, 61, 44)
         );
         changePosition(
             sofa,
@@ -216,7 +217,7 @@ public class SceneManager : MonoBehaviour
             "muebles/Kitchen/Cabinets/KitchenStove2/KitchenStove2",
             "KitchenStove2",
             "KitchenStove2Texture",
-            rgba(44, 30, 22)
+            rgba(61,61,61)
         );
         changePosition(
             KitchenStove2,
@@ -238,7 +239,7 @@ public class SceneManager : MonoBehaviour
             "muebles/Kitchen/Cabinets/KitchenCabinet1/KitchenCabinet1",
             "KitchenCabinet1",
             "KitchenCabinet1Texture",
-            rgba(44, 30, 22)
+            rgba(106,137,167)
         );
         changePosition(
             KitchenCabinet1,
@@ -366,6 +367,17 @@ public class SceneManager : MonoBehaviour
             frontWall,
             new Vector3(frontWallHalf.x, frontWallHalf.y, frontWallHalf.z)
         );
+        var (frame, frameHalf) = loadObject(
+            "walls/house/doorframe",
+            "doorFrame",
+            "",
+            rgba(33,34,35)
+        );
+        changePosition(
+            frame,
+            new Vector3(frontWallHalf.x, frameHalf.y, frameHalf.z)
+        );
+        _walls.Add(frame);
         _walls.Add(frontWall);
     }
 
@@ -416,7 +428,7 @@ public class SceneManager : MonoBehaviour
 
     private void createCeiling()
     {
-        Color ceilingColor = rgba(243, 243, 243);
+        Color ceilingColor = rgba(211,211,211);
         var (ceiling, ceilingHalf) = loadObject(
            "walls/house/ceiling",
            "ceiling",
@@ -482,7 +494,21 @@ public class SceneManager : MonoBehaviour
             bathroomFrontWall,
             new Vector3(bathroomFrontWallHalf.x + 3.85f, bathroomFrontWallHalf.y, bathroomFrontWallHalf.z + wallThickness)
         );
+
+        var (frame, frameHalf) = loadObject(
+            "walls/house/doorframe",
+            "doorFrame",
+            "",
+            rgba(33,34,35)
+        );
+        changePosition(
+            frame,
+            new Vector3(bathroomFrontWallHalf.x + 3.85f, frameHalf.y, 3.75f),
+            new Vector3(0, 90 * Mathf.Deg2Rad, 0)
+        );
+        _walls.Add(frame);
         _walls.Add(bathroomFrontWall);
+
     }
 
     private void createBathroomSideWall(Color wallColor)
