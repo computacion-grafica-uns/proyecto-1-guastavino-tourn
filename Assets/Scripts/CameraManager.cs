@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
@@ -16,8 +13,8 @@ public class CameraManager : MonoBehaviour
     private float orbitPitch = 30f;
     private Vector3 orbitTarget = new Vector3(5f, 0f, 5f);
 
-    private float cameraSpeed = 10f;
-    private float mouseSensitivity = 2f;
+    private float cameraSpeed = 8f;
+    private float orbitSpeed = 2f;
     private float yaw = 0f;
     private float pitch = 0f;
     private float fov = 60;
@@ -99,14 +96,13 @@ public class CameraManager : MonoBehaviour
 
     private void UpdateOrbital()
     {
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) orbitYaw += mouseSensitivity * 50f * Time.deltaTime;
-        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) orbitYaw -= mouseSensitivity * 50f * Time.deltaTime;
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) orbitPitch += mouseSensitivity * 50f * Time.deltaTime;
-        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) orbitPitch -= mouseSensitivity * 50f * Time.deltaTime;
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) orbitYaw += orbitSpeed * 50f * Time.deltaTime;
+        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) orbitYaw -= orbitSpeed * 50f * Time.deltaTime;
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) orbitPitch += orbitSpeed * 50f * Time.deltaTime;
+        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) orbitPitch -= orbitSpeed * 50f * Time.deltaTime;
 
-        orbitDistance -= Input.GetAxis("Mouse ScrollWheel") * 5f;
-        if (Input.GetKey(KeyCode.Space)) orbitDistance -= cameraSpeed * Time.deltaTime;
-        if (Input.GetKey(KeyCode.LeftShift)) orbitDistance += cameraSpeed * Time.deltaTime;
+        if (Input.GetKey(KeyCode.Space)) orbitDistance -= cameraSpeed * 2f * Time.deltaTime;
+        if (Input.GetKey(KeyCode.LeftShift)) orbitDistance += cameraSpeed * 2f * Time.deltaTime;
 
         float pitchRad = orbitPitch * Mathf.Deg2Rad;
         float yawRad = orbitYaw * Mathf.Deg2Rad;
